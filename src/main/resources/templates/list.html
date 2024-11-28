@@ -84,13 +84,13 @@
                         <img th:src="@{'/images/' + ${room.images}}" alt="Room Image" class="img-fluid">
                     </td>
                    
-                    <td class="action-buttons">
+                    <td class="row action-buttons">
                         <!-- Bouton Modifier -->
-                        <form  th:action="|@{/rooms/{roomId}/edit(roomId=${room.roomId})}|" method="get">
-                            <input type="submit" class="btn btn-purple" value="update">
+                        <form class="col-4" th:action="|@{/rooms/{roomId}/edit(roomId=${room.roomId})}|"style="display: inline;"  method="get">
+                            <button  type="submit" class="btn btn-purple" >Modifier</button>
                           </form>
                            <!-- Formulaire Supprimer -->
-                        <form class="mt-10" th:action="|@{/rooms/{roomId}/delete(roomId=${room.roomId})}|" method="post" style="display: inline;">
+                        <form class="col-4" th:action="|@{/rooms/{roomId}/delete(roomId=${room.roomId})}|" method="post" style="display: inline;">
                         
                             <button type="submit" class="btn btn-purple btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Supprimer</button>
                         </form>
