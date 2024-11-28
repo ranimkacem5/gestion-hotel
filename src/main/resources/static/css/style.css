@@ -1,0 +1,74 @@
+/* Hero Section */
+.hero-section {
+    height: 100vh; /* Prendre toute la hauteur de la fenêtre */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white; /* Texte blanc pour la lisibilité */
+    
+    background-size: cover;
+}
+ /* Assurer que l'image de fond couvre toute la page de manière responsive */
+ body, html {
+    height: 100%;
+    margin: 0;
+    background: url('https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
+    background-size: cover;
+    background-position: center center;
+}
+
+/* Le navbar sera aussi recouvert par l'image de fond */
+header {
+    position: relative;
+    z-index: 1; /* Assurez-vous que la navbar soit au-dessus de l'image */
+}
+
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.7); /* Semble s'intégrer avec l'image de fond */
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+/* Titre Villa Maïa */
+.villa-maia-title {
+    font-family: 'Playfair Display', serif; /* Police italienne */
+    font-size: 4rem; /* Ajustez la taille du texte */
+    color: rgba(255, 255, 255, 0.7); /* Noir vers transparent */
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.1));
+    -webkit-background-clip: text;
+    background-clip: text; /* Applique le dégradé au texte */
+    padding: 20px;
+    font-weight: bold; /* Pour rendre le texte plus épais */
+    letter-spacing: 3px; /* Espacement des lettres */
+}
+
+/* Style pour le texte de la description */
+.hero-section .lead {
+    color: rgba(255, 255, 255, 0.7); /* Noir vers transparent */
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.9), rgba(255, 255, 255, 0.1));
+    font-size: 1.5rem;
+    margin-top: 10px;
+    font-weight: 300;
+}
+
+/* Style pour le bouton Book Now */
+.hero-section .btn {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+@media (max-width: 768px) {
+    .hero-section {
+        height: 80vh;
+    }
+}
+.btn{
+    color: rgba(255, 255, 255, 0.7); 
+}
+.custom-btn {
+    color : rgba(255, 255, 255, 0.7)  ;/* Remplacez #ff5733 par la couleur de votre choix */
+}
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Hotel Management - Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/litera/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+       
+
+       
+      
+    </style>
+</head>
+<body>
+    <!-- Include Header Fragment-->
+    <div th:replace="fragments/header :: header"></div> 
+
+    <div class="hero-section">
+        <div>
+            <h1 class="villa-maia-title">Villa Maïa</h1>
+            <p class="lead">Luxury 5-Star Hotel in Lyon</p>
+             <a href="/booking" class="btn btn-outline-secondary custom-btn">Book Now</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Villa Maïa - All Rights Reserved</p>
+    </div>
+</body>
+</html>
