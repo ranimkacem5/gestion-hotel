@@ -86,15 +86,18 @@
                    
                     <td class="row action-buttons">
                         <!-- Bouton Modifier -->
-                        <form class="col-4" th:action="|@{/rooms/{roomId}/edit(roomId=${room.roomId})}|"style="display: inline;"  method="get">
-                            <button  type="submit" class="btn btn-purple" >Modifier</button>
-                          </form>
-                           <!-- Formulaire Supprimer -->
-                        <form class="col-4" th:action="|@{/rooms/{roomId}/delete(roomId=${room.roomId})}|" method="post" style="display: inline;">
+                        <form th:action="|@{/rooms/{roomId}/edit(roomId=${room.roomId})}|" method="get" class="d-inline">
+                            <button type="submit" class="btn btn-purple btn-sm">Modifier</button>
+                        </form>
                         
-                            <button type="submit" class="btn btn-purple btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Supprimer</button>
+                        <!-- Formulaire Supprimer -->
+                        <form th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete" class="d-inline">
+                            <button type="submit" class="btn btn-purple btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">
+                                Supprimer
+                            </button>
                         </form>
                     </td>
+                    
                     <td th:text="${room.roomId}"></td>
                 </tr>
             </tbody>

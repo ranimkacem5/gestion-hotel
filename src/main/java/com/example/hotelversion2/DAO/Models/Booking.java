@@ -29,7 +29,7 @@ public class Booking {
   private Long Booking_id;
 
   //???
-  @ManyToMany
+   @ManyToMany
   @JoinTable(
     name = "booking_room", // Join table to connect bookings and rooms
     joinColumns = @JoinColumn(name = "booking_id"), // Foreign key for the booking

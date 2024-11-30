@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class CustommerController {
-  
-
+public class PageController {
+    @RequestMapping(path = "/contact", method = RequestMethod.GET)
+    public String ContactPage(@RequestParam String param) {
+        return "contact";
+    }
 }

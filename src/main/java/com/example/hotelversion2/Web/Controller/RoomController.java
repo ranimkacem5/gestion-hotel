@@ -116,7 +116,7 @@ public String ShowpageHome() {
     @RequestMapping(path = "/rooms/{id}/edit")
     public String geteditform(@PathVariable Long id, Model model) {
         Room r = rommservice.getRoomById(id);
-        model.addAttribute("", new RoomForm(r.getStatus(), r.getView(), r.getRoomType(), r.getEquipments(),
+        model.addAttribute("roomForm", new RoomForm(r.getStatus(), r.getView(), r.getRoomType(), r.getEquipments(),
                 r.getCapacity(), r.getPricePerNight(), null));
         return "edit-room";
     }
@@ -129,7 +129,12 @@ public String ShowpageHome() {
             model.addAttribute("error", "form invalide");
             return "edit-room";
         }
-
+         r.setCapacity(rf.getCapacity());
+         r.setEquipments(rf.getEquipements());
+         r.setPricePerNight(rf.getPricePerNight());
+         r.setRoomType(rf.getRoomType());
+         r.setStatus(rf.getStatus());
+         r.setView(rf.getView());
         if (!file.isEmpty()) {
             StringBuilder fileName = new StringBuilder();
             fileName.append(file.getOriginalFilename());
@@ -156,16 +161,14 @@ public String ShowpageHome() {
                 }
 
             }
-            this.rommservice
-                    .updateRoom(new Room(null, rf.getStatus(), rf.getView(), rf.getRoomType(), rf.getEquipements(),
-                            rf.getCapacity(), rf.getPricePerNight(), fileName.toString()));
+            r.setImages( fileName.toString());
+          
 
-        } else {
+        } 
 
             this.rommservice
-                    .updateRoom(new Room(null, rf.getStatus(), rf.getView(), rf.getRoomType(), rf.getEquipements(),
-                            rf.getCapacity(), rf.getPricePerNight(), null));
-        }
+                    .updateRoom(r);
+        
 
         return "redirect:/rooms";
     }
