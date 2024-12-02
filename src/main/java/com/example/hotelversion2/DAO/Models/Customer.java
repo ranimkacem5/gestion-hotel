@@ -20,9 +20,7 @@ public class Customer {
     String Adress;
     @OneToMany(mappedBy = "customer")
     private  List <Booking> booking_history ;
-    @Enumerated(EnumType.STRING)
-    @Column(name="methode_payment " ,nullable = false)
-    TypePaiement method_Paiement;
+ 
 
 
    

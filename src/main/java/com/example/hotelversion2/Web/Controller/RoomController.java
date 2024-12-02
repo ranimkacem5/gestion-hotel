@@ -56,6 +56,14 @@ public class RoomController {
     public RoomController(RoomServices roomservice) {
         this.rommservice =roomservice;
     }
+    @GetMapping("/client/rooms")
+
+    public String afficherChambres(Model model) {
+        model.addAttribute("rooms", this.rommservice.getAllRooms());
+        
+       
+        return "liste-room-client";
+    }
 @GetMapping("/")
 public String ShowpageHome() {
     return ("homepage");
