@@ -7,30 +7,71 @@
     <!-- Bootswatch Lux Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/lux/bootstrap.min.css" rel="stylesheet">
     <style>
-        .chambre-card img {
-            max-height: 150px;
-            object-fit: cover;
+        .chambre-card {
+            margin-bottom: 1.5rem;
             border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    
+        .chambre-card .image-container {
+            flex: 1; /* Prend tout l'espace disponible dans la colonne */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 10px; /* Coins arrondis */
+        }
+    
+        .chambre-card .image-container img {
+            width: 100%; /* Étend l'image horizontalement */
+            height: 100%; /* Étend l'image verticalement */
+            object-fit: cover; /* Maintient l'image centrée et bien cadrée */
+        }
+    
+        .chambre-info {
+            padding-left: 15px;
+            flex: 2; /* Ajuste l'espace pour les informations de la chambre */
+        }
+    
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+    
+        .reservation-btn {
+            margin-top: 10px;
         }
     </style>
+    
 </head>
 <body>
     <div class="container my-4">
         <h1 class="text-center mb-4">Liste des Chambres</h1>
-        <div class="row g-4" th:each="room : ${rooms}">
+        <div class="row" th:each="room : ${rooms}">
             <!-- Card for each room -->
-            <div class="col-md-4">
-                <div class="card chambre-card shadow-lg">
-                    <img class="card-img-top" th:src="@{'/images/'+${room.images}}" alt="Image de la chambre">
-                    <div class="card-body">
-                        <h5 class="card-title">Chambre n°<span th:text="${room.roomId}"></span></h5>
-                        <p class="card-text">
-                            <strong>Type :</strong> <span th:text="${room.roomType}"></span><br>
-                            <strong>Capacité :</strong> <span th:text="${room.capacity}"></span> personnes<br>
-                            <strong>Tarif :</strong> <span th:text="${room.pricePerNight} + ' €'"></span>
-                        </p>
-                        <h6>Équipements :</h6>
-                        <p th:text="${room.equipments}"></p>
+            <div class="col-md-12">
+                <div class="card chambre-card d-flex flex-row">
+                    <!-- Image -->
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                        <div class="image-container">
+                            <img th:src="@{'/images/' + ${room.images}}" alt="Image de la chambre">
+                        </div>
+                    </div>
+                    <!-- Room details -->
+                    <div class="col-md-8 d-flex flex-column justify-content-between p-3 chambre-info">
+                        <div>
+                            <h5 class="card-title">Chambre n°<span th:text="${room.roomId}"></span> - <span th:text="${room.roomType}"></span></h5>
+                            <p>
+                                <strong>Capacité :</strong> <span th:text="${room.capacity}"></span> personnes<br>
+                                <strong>Tarif :</strong>
+                                <span class="price" th:text="${room.pricePerNight} + ' €'"></span>
+                            </p>
+                            <h6>Équipements :</h6>
+                            <p th:text="${room.equipments}"></p>
+                        </div>
+                        <button class="btn btn-primary reservation-btn">Réserver Maintenant</button>
                     </div>
                 </div>
             </div>
