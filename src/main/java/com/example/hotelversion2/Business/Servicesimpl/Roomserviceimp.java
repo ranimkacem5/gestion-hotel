@@ -2,14 +2,17 @@ package com.example.hotelversion2.Business.Servicesimpl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.hotelversion2.Business.Services.RoomServices;
 import com.example.hotelversion2.DAO.Models.Room;
+import com.example.hotelversion2.DAO.Models.RoomType;
 import com.example.hotelversion2.DAO.Repository.RoomRepository;
 @Service
 public class Roomserviceimp implements RoomServices {
     private final RoomRepository roomrep;
+    @Autowired
     public Roomserviceimp(RoomRepository  roomreps)
     {
         roomrep=roomreps ;
@@ -47,6 +50,26 @@ public class Roomserviceimp implements RoomServices {
         return null ;
 
         return roomrep.save(room);
+    }
+
+    @Override
+    public List<Room> getRoombyRoomType(RoomType roomType) {
+        return roomrep.findByRoomType(roomType);
+       
+    }
+    @Override
+    public List<Room> getRoomByView(String view) {
+      return roomrep.findByView(view);
+    }
+    @Override
+    public List<Room> getRoomByCapacity(int capacity) {
+      return roomrep.findByCapacity(capacity);
+      
+    }
+    @Override
+    public List<Room> getRoomByPricePerNightLessThan(double price) {
+        return roomrep.findByPricePerNightLessThan(price);
+
     }
     
  

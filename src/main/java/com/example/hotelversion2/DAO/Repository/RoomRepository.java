@@ -13,6 +13,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findByRoomType(RoomType roomType); 
     List<Room> findByPricePerNightLessThan(double pricePerNight);  
-    List<Room> findByCapacityGreaterThanEqual(int capacity);  
-    List<Room> findByRoomTypeAndPricePerNightLessThan(RoomType roomType, double pricePerNight); 
+    List<Room> findByCapacity(int capacity);  
+    List<Room> findByView(String view);
 }

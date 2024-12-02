@@ -6,6 +6,7 @@
     <title>Liste des Chambres</title>
     <!-- Bootswatch Lux Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/lux/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .chambre-card {
             margin-bottom: 1.5rem;
@@ -13,38 +14,58 @@
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-    
-        .chambre-card .image-container {
-            flex: 1; /* Prend tout l'espace disponible dans la colonne */
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            border-radius: 10px; /* Coins arrondis */
+            border-radius: 10px;
         }
-    
-        .chambre-card .image-container img {
-            width: 100%; /* Étend l'image horizontalement */
-            height: 100%; /* Étend l'image verticalement */
-            object-fit: cover; /* Maintient l'image centrée et bien cadrée */
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-    
+
+        /* Icône superposée */
+        .image-container .icon-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-container:hover .icon-overlay {
+            opacity: 1;
+        }
+
         .chambre-info {
             padding-left: 15px;
-            flex: 2; /* Ajuste l'espace pour les informations de la chambre */
         }
-    
+
         .price {
             font-size: 1.2rem;
             font-weight: bold;
             color: #28a745;
         }
-    
+
         .reservation-btn {
             margin-top: 10px;
         }
     </style>
-    
 </head>
 <body>
     <div class="container my-4">
@@ -57,6 +78,9 @@
                     <div class="col-md-4 d-flex justify-content-center align-items-center">
                         <div class="image-container">
                             <img th:src="@{'/images/' + ${room.images}}" alt="Image de la chambre">
+                            <!-- Icône superposée -->
+                            <i class="fas fa-search icon-overlay" data-bs-toggle="modal" data-bs-target="#imageModal" 
+                               th:attr="data-bs-image-src=@{'/images/' + ${room.images}}"></i>
                         </div>
                     </div>
                     <!-- Room details -->
@@ -77,7 +101,32 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal pour afficher l'image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Aperçu de l'image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="" alt="Aperçu" class="img-fluid" id="modalImage">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JavaScript Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Script pour charger l'image dans la modale
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('icon-overlay')) {
+                const imageSrc = e.target.getAttribute('data-bs-image-src');
+                document.getElementById('modalImage').setAttribute('src', imageSrc);
+            }
+        });
+    </script>
 </body>
 </html>
