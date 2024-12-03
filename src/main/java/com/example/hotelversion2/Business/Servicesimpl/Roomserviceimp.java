@@ -1,6 +1,8 @@
 package com.example.hotelversion2.Business.Servicesimpl;
 
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +73,18 @@ public class Roomserviceimp implements RoomServices {
         return roomrep.findByPricePerNightLessThan(price);
 
     }
+
+
+
+    @Override
+    public List<Room> getRoomSortedByPrice(String order) {
+        Sort.Direction direction= Sort.Direction.ASC;
+        if("desc".equalsIgnoreCase(order)){
+
+            direction= Sort.Direction.DESC;
+       
+    }
+    return roomrep.findAll(Sort.by(direction,"pricePerNight"));
     
  
-}
+}}

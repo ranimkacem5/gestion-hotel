@@ -14,7 +14,8 @@ public interface RoomServices {
     List<Room> getRoomByView(String view);
 List<Room> getRoombyRoomType(RoomType roomType);
 List<Room>getRoomByCapacity(int capacity);
-List<Room> getRoomByPricePerNightLessThan(double price );
+List<Room> getRoomByPricePerNightLessThan(double pricePerNight );
+List<Room> getRoomSortedByPrice(String order);
     // Create
     Room addRoom(Room room);
 

@@ -3,111 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des chambres</title>
-    <!-- Lien vers Bootstrap CSS -->
+    <title>Liste des Chambres</title>
     <link th:replace="layout/default-layout::link">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .table th {
-            background-color: #6f42c1;
+            background-color: #6c757d; /* Gris moyen */
             color: white;
         }
+
         .table {
-            border-color: #6f42c1;
+            border-color: #dee2e6; /* Gris clair */
         }
+
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f3e6ff;
+            background-color: #f8f9fa; /* Gris très clair */
         }
-        .btn-purple {
-            background-color: #6f42c1;
-            color: white;
-            border: none;
+
+        .btn-primary {
+            background-color: #6c757d; /* Gris moyen */
+            border-color: #6c757d;
         }
-        .btn-purple:hover {
-            background-color: #5a379b;
+
+        .btn-primary:hover {
+            background-color: #5a6268; /* Gris foncé */
+            border-color: #5a6268;
         }
+
         h1 {
             text-align: center;
             margin: 20px 0;
-            color: #6f42c1;
-        }
-        .container {
-            margin-top: 20px;
-        }
-    
-        .action-buttons .btn {
-            margin-right: 5px;
+            color: #6c757d; /* Gris moyen */
         }
     </style>
+    <script type="text/javascript">
+        function submitForm() {
+          document.getElementById("filterForm").submit();
+        }
+      </script>
 </head>
 <body th:replace="layout/default-layout::body">
-    
-    <div th:fragment="content">
-    <h1>Liste des chambres</h1>
-
-    <!-- Bouton de retour en arrière -->
-    <div class="mb-3">
-        <a href="javascript:history.back()" class="btn btn-purple">Retour</a>
-    </div>
-
-    <!-- Bouton Ajouter une chambre séparé -->
-    <div class="mb-3">
-        <a href="/rooms/create" class="btn btn-purple">Ajouter une chambre</a>
-    </div>
-
-    
-    <div>
-        <table class="table  table-hover" th:unless="${#lists.isEmpty(rooms)}">
-            
-                <tr>
-                    <th>Type</th>
-                    <th>Vue</th>
-                    <th>Capacité</th>
-                    <th>Prix par nuit</th>
-                    <th>Status</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                 
-                </tr>
-                <!-- ${state.even} : Vérifie si l'élément courant est à un index pair dans la collection.? 'table-light' : '' :Si state.even est true, la classe CSS table-light est ajoutée à l'attribut class de la balise <tr>.Sinon, aucune classe n'est ajoutée (représenté par '').-->
-                <tr th:each="room,state: ${rooms}" th:class="${state.even} ? 'table-dark' : ''">
-                    <td th:text="${room.roomType}"></td>
-                    <td th:text="${room.view}"></td>
-                    <td th:text="${room.capacity}"></td>
-                    <td th:text="${room.pricePerNight} + ' €'"></td>
-                    <td th:text="${room.status}"></td>
-                    <td>
-                        <img th:src="@{|images/${room.images}|}" alt="Room Image" class="img-responsive img-fluid" style="max-height: 150px; max-width: 150px;">
-                    </td>
-                   
-                    <td class=" action-buttons">
-                        <div class="row">
-                        <!-- Bouton Modifier -->
-                        <form class="col-6 " th:action="|@{/rooms/{roomId}/edit(roomId=${room.roomId})}|" method="get" >
-                            <button type="submit" class="btn btn-purple btn-sm">Modifier</button>
+<div th:fragment="content">
+    <div class="container">
+        <h1>Liste des Chambres</h1>
+        <!-- Boutons pour ajouter une chambre et gérer les filtres -->
+        <div class="row mt-3 mb-4">
+            <div class="col-4">
+                <a href="/rooms/create" class="btn btn-primary">Ajouter une Chambre</a>
+            </div>
+            <div class="col-4">
+                <p><strong>Sort by Age:</strong></p>
+                <form th:action="@{/rooms/filter}" method="get" id="filterForm">
+                  <label><input type="radio" name="sortByPrix" value="asc" th:checked="${sortByPrix=='asc'}"
+                      onchange="submitForm()"> Trier par le prix bas </label>
+                  <label><input type="radio" name="sortByPrix" value="desc" th:checked="${sortByPrix=='desc'}"
+                      onchange="submitForm()"> Trier par le prix élevé</label>
+                </form>
+        </div>
+        <!-- Tableau -->
+        <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(rooms)}">
+            <thead class="table-dark">
+            <tr>
+                <th>N°</th>
+                <th>Type</th>
+                <th>Vue</th>
+                <th>Capacité</th>
+                <th>Prix par Nuit</th>
+                <th>Status</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room, state : ${rooms}" th:class="${state.even} ? 'table-light' : ''">
+                <td th:text="${state.index + 1}"></td>
+                <td th:text="${room.roomType}"></td>
+                <td th:text="${room.view}"></td>
+                <td th:text="${room.capacity}"></td>
+                <td th:text="${room.pricePerNight} + ' €'"></td>
+                <td th:text="${room.status}"></td>
+                <td>
+                    <img th:src="@{|images/${room.images}|}" alt="Room Image" class="img-fluid" style="max-width: 100px;">
+                </td>
+                <td>
+                    <div class="d-flex">
+                        <form  th:action="@{/rooms/{roomId}/edit(roomId=${room.roomId})}" method="get" class="mr-2">
+                            <button type="submit" class="btn btn-success btn-sm">Modifier</button>
                         </form>
-                        
-                        <!-- Formulaire Supprimer -->
-                        <form class="col-6 " th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete" >
-                            <button type="submit" class="btn btn-purple btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">
-                                Supprimer
-                            </button>
+                        <form th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Supprimer</button>
                         </form>
                     </div>
-                    </td>
-                    
-                  
-                </tr>
-            
+                </td>
+            </tr>
+            </tbody>
         </table>
+        <!-- Message si aucune chambre n'est trouvée -->
         <div class="alert alert-warning" th:if="${#lists.isEmpty(rooms)}">
-            No person found !
-          </div>
-        
+            Aucune chambre trouvée.
+        </div>
     </div>
-
 </div>
-
-
 </body>
 </html>

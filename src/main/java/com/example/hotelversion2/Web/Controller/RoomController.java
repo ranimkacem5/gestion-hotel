@@ -1,5 +1,6 @@
 package com.example.hotelversion2.Web.Controller;
 import java.nio.file.Paths;
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -56,7 +57,16 @@ public class RoomController {
     public RoomController(RoomServices roomservice) {
         this.rommservice =roomservice;
     }
-    @GetMapping("/client/rooms")
+    @GetMapping("/rooms/filter")
+    public String filterRooms(@RequestParam(required = false, defaultValue = "asc") String sortByPrix, Model model) {
+        // Récupérer la liste des chambres triée
+        List<Room> rooms = rommservice.getRoomSortedByPrice(sortByPrix);
+        model.addAttribute("rooms", rooms);
+        model.addAttribute("sortByPrix", sortByPrix); // Maintenir l'état du filtre
+        return "list"; // Vue Thymeleaf pour afficher les chambres
+    }
+
+    @GetMapping("client/rooms")
 
     public String afficherChambres(Model model) {
         model.addAttribute("rooms", this.rommservice.getAllRooms());
