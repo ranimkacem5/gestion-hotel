@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.hotelversion2.DAO.entites.Customer;
-@Service
+@Service("Customerservice")
 public interface Customerservice {
     List<Customer> getallcustommers();
     Customer  getCustomerbyId(Long id);

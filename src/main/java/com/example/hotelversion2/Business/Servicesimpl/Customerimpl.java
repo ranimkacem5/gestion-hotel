@@ -3,11 +3,12 @@ package com.example.hotelversion2.Business.Servicesimpl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.hotelversion2.Business.Services.Customerservice;
 import com.example.hotelversion2.DAO.Repository.CustommerRepository;
 import com.example.hotelversion2.DAO.entites.Customer;
-
+@Service("Customerimpl")
 public class Customerimpl implements Customerservice{
 @Autowired
 CustommerRepository custommerrepository ;

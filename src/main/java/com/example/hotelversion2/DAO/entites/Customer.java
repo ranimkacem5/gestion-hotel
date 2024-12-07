@@ -24,7 +24,7 @@ public class Customer {
     private String Email;
     @Column(name="Contact" ,nullable  =false)
     private String Contact;
-    @Column(name="address",nullable = false)
+    @Column(name="Address",nullable = false)
     private String Address;
     @OneToMany(mappedBy = "customer")
     private  List <Booking> booking_history ;

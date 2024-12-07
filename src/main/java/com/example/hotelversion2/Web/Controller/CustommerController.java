@@ -2,6 +2,7 @@ package com.example.hotelversion2.Web.Controller;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,7 @@ import com.example.hotelversion2.DAO.entites.Booking;
 import com.example.hotelversion2.DAO.entites.Customer;
 import com.example.hotelversion2.Web.Models.CustomerForm;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Past;
 
@@ -38,8 +40,9 @@ import jakarta.validation.constraints.Past;
 @RequestMapping("/clients")
 public class CustommerController {
     // The line `private final Customerservice customerservice;` in the Java code snippet is declaring a private final instance variable named `customerservice` of type `Customerservice`. This variable is used to hold a reference to an instance of the `Customerservice` class, which is a service class responsible for handling operations related to customers in the application.
+   
     private final Customerservice customerservice ;
-    public CustommerController(Customerservice customerservice )
+    public CustommerController(@Autowired Customerservice customerservice )
     {
 this.customerservice=customerservice;
     }
@@ -55,7 +58,7 @@ model.addAttribute("customerForm", new CustomerForm());
 }
 
 @RequestMapping(path="/create",method = RequestMethod.POST)
-public String requestMethodName(@ModelAttribute  CustomerForm customerForm,BindingResult br  ,Model model) {
+public String requestMethodName(@Valid @ModelAttribute  CustomerForm customerForm,BindingResult br  ,Model model) {
 if(br.hasErrors())
 { 
   model.addAttribute("error", "Invalide input");  
