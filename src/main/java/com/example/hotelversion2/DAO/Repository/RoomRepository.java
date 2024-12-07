@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.hotelversion2.DAO.Models.Room;
-import com.example.hotelversion2.DAO.Models.RoomType;
+import com.example.hotelversion2.DAO.entites.Room;
+import com.example.hotelversion2.Web.Models.RoomType;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {

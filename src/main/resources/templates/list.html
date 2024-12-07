@@ -83,7 +83,7 @@
                 <td th:text="${room.pricePerNight} + ' €'"></td>
                 <td th:text="${room.status}"></td>
                 <td>
-                    <img th:src="@{|images/${room.images}|}" alt="Room Image" class="img-fluid" style="max-width: 100px;">
+                    <img th:src="@{|/images/${room.images}|}" alt="Room Image" class="img-fluid" style="max-width: 100px;">
                 </td>
                 <td>
                     <div class="d-flex">
@@ -93,6 +93,10 @@
                         <form th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Supprimer</button>
                         </form>
+                        <form  th:action="@{/rooms}" method="get" class="mr-2">
+                            <button type="submit" class="btn btn-success btn-sm">Reserver</button>
+                        </form>
+                        
                     </div>
                 </td>
             </tr>
@@ -102,6 +106,21 @@
         <div class="alert alert-warning" th:if="${#lists.isEmpty(rooms)}">
             Aucune chambre trouvée.
         </div>
+        <div>
+            <ul class="pagination pagination-sm">
+              <li class="page-item" th:classappend="${currentPage==0?'disabled':''}">
+                <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage-1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage-1}|}">&laquo;</a>
+              </li>
+              <li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"    
+                  th:classappend="${currentPage==index ?'active':''}">
+                <a class="page-link"th:href="${sortByPrix==null}?@{|/rooms?page=${index}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${index}|}" th:text="${index+1}"></a>
+              </li>
+             
+              <li class="page-item"  th:classappend="${currentPage== totalPages -1?'disabled':''}">
+                <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage+1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage+1}|}">&raquo;</a>
+              </li>
+            </ul>
+          </div>
     </div>
 </div>
 </body>

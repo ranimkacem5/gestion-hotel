@@ -1,4 +1,4 @@
-package com.example.hotelversion2.DAO.Models;
+package com.example.hotelversion2.DAO.entites;
 
 import java.time.LocalDate;
 import jakarta.persistence.Column;

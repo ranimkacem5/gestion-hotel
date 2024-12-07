@@ -1,7 +1,10 @@
-/*package com.projetspringbbot.projet.Repository;
+package com.example.hotelversion2.DAO.Repository;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.projetspringbbot.projet.Models.Custommer;
-public interface CustommerRepository extends JpaRepository <Custommer, Long> {
+import com.example.hotelversion2.DAO.entites.Customer;
+
+
+public interface CustommerRepository extends JpaRepository <Customer, Long> {
     
-}*/
+}

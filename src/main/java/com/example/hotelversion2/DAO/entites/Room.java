@@ -1,6 +1,9 @@
-package com.example.hotelversion2.DAO.Models;
+package com.example.hotelversion2.DAO.entites;
 
 import java.util.List; // Corrigé pour utiliser java.util.List
+
+import com.example.hotelversion2.Web.Models.RoomType;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;

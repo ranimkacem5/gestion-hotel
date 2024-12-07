@@ -1,4 +1,4 @@
-package com.example.hotelversion2.DAO.Models;
+package com.example.hotelversion2.Web.Models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -21,13 +21,8 @@ public class User {
     @NotEmpty
     @Size(min = 5, max = 30)
     private String password ;
-     @Column(name = "isAdmin", nullable = false)
-    @NotEmpty
-    private boolean isAdmin = true;
-    //@Enumerated(EnumType.STRING)
-    //@Column(name = "role", nullable = false)
-    //private Role role;
-
+    
+   
 
 
 

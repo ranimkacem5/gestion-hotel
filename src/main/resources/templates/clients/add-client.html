@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Customer</title>
+    <script type="text/javascript"></script>
+    
+    <link th:replace="~{layout/default-layout::link}">
+</head>
+<body th:replace="~{layout/default-layout::body}">
+    <div th:fragment="content">
+        <div class="mt-3 mb-4">
+            <a class="btn btn-primary" th:href="@{/clients}">Back</a>
+        </div>
+        <form th:action="@{/clients/create}" th:object="${customerForm}" method="POST">
+            
+            <!-- Name Field -->
+            <div>
+                <label for="Name" class="form-label mt-4">
+                    Prénom
+                </label>
+                <input type="text" class="form-control mt-2" name="Name" th:classappend="${#fields.hasErrors('Name')}?is-invalid" th:field="*{Name}">
+                <span th:if="${#fields.hasErrors('Name')}" th:errors="*{Name}" class="invalid-feedback">Erreur: Prénom requis</span>
+            </div>
+
+            <!-- Last Name Field -->
+            <div>
+                <label for="LastName" class="form-label mt-4">
+                    Nom
+                </label>
+                <input type="text" class="form-control mt-2" name="LastName" th:classappend="${#fields.hasErrors('LastName')}?is-invalid" th:field="*{LastName}">
+                <span th:if="${#fields.hasErrors('LastName')}" th:errors="*{LastName}" class="invalid-feedback">Erreur: Nom requis</span>
+            </div>
+
+            <!-- Email Field -->
+            <div>
+                <label for="Email" class="form-label mt-4">
+                    Email
+                </label>
+                <input type="Email" class="form-control mt-2" name="Email" th:classappend="${#fields.hasErrors('Email')}?is-invalid" th:field="*{Email}">
+                <span th:if="${#fields.hasErrors('Email')}" th:errors="*{Email}" class="invalid-feedback">Erreur: Email invalide</span>
+            </div>
+
+            <!-- Contact Field -->
+            <div>
+                <label for="Contact" class="form-label mt-4">
+                    Contact
+                </label>
+                <input type="text" class="form-control mt-2" name="Contact" th:classappend="${#fields.hasErrors('Contact')}?is-invalid" th:field="*{Contact}">
+                <span th:if="${#fields.hasErrors('Contact')}" th:errors="*{Contact}" class="invalid-feedback">Erreur: Contact requis</span>
+            </div>
+
+            <!-- Address Field -->
+            <div>
+                <label for="Address" class="form-label mt-4">
+                    Adresse
+                </label>
+                <textarea class="form-control" name="Address" rows="3" th:classappend="${#fields.hasErrors('Address')}?is-invalid" th:field="*{Address}"></textarea>
+                <span th:if="${#fields.hasErrors('Address')}" th:errors="*{Address}" class="invalid-feedback">Erreur: Adresse requise</span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4">
+                <input class="btn btn-success" type="submit" value="Save">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

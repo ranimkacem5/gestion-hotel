@@ -1,6 +1,9 @@
-package com.example.hotelversion2.DAO.Models;
+package com.example.hotelversion2.DAO.entites;
 
 import java.util.Date;
+
+import com.example.hotelversion2.Web.Models.TypePaiement;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

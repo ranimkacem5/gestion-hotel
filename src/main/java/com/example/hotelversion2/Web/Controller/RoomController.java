@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,10 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.hotelversion2.Business.Services.RoomServices;
-
-import com.example.hotelversion2.DAO.Models.Room;
-import com.example.hotelversion2.DAO.Models.RoomForm;
-
+import com.example.hotelversion2.DAO.entites.Room;
+import com.example.hotelversion2.Web.Models.RoomForm;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.slf4j.Logger;
@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  * 
  * Delete -Post /Rooms/{id}/delete  : supprimer une chambre de la liste chambre
  */
-@Controller
 
+@Controller
 public class RoomController {
     public final RoomServices rommservice;
     private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
@@ -57,14 +57,14 @@ public class RoomController {
     public RoomController(RoomServices roomservice) {
         this.rommservice =roomservice;
     }
-    @GetMapping("/rooms/filter")
+   /*  @GetMapping("/rooms/filter")
     public String filterRooms(@RequestParam(required = false, defaultValue = "asc") String sortByPrix, Model model) {
         // Récupérer la liste des chambres triée
         List<Room> rooms = rommservice.getRoomSortedByPrice(sortByPrix);
         model.addAttribute("rooms", rooms);
         model.addAttribute("sortByPrix", sortByPrix); // Maintenir l'état du filtre
         return "list"; // Vue Thymeleaf pour afficher les chambres
-    }
+    }*/
 
     @GetMapping("client/rooms")
 
@@ -80,8 +80,26 @@ public String ShowpageHome() {
 }
 
     @GetMapping("/rooms")
-    public String getAllRooms(Model model) {
-        model.addAttribute("rooms", this.rommservice.getAllRooms());
+    public String getAllRooms(@RequestParam (defaultValue="0") int page, @RequestParam (defaultValue="3")int pagesize ,Model model) {
+        Page<Room>pageroom=this.rommservice.getAllRoomPagination(PageRequest.of(page, pagesize));
+        model.addAttribute("rooms", pageroom.getContent());
+        model.addAttribute("pageSize", pagesize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", pageroom.getTotalPages());
+        return "list";
+    }
+    @RequestMapping("/rooms/filter")
+    public String getPersonSorted(@RequestParam(required = false, defaultValue = "asc") String sortByPrix,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int pageSize,
+            Model model) {
+        Page<Room> RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix,
+                PageRequest.of(page, pageSize));
+        model.addAttribute("rooms", RoomPage.getContent());
+        model.addAttribute("sortByAge", sortByPrix);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", RoomPage.getTotalPages());
         return "list";
     }
 
