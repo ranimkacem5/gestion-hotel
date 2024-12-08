@@ -1,10 +1,12 @@
-/*package com.projetspringbbot.projet.Repository;
+package com.example.hotelversion2.DAO.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import com.projetspringbbot.projet.Models.Booking;
+import com.example.hotelversion2.DAO.entites.Booking;
+
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    // Ajoutez des méthodes de requête personnalisées si nécessaire
-} */
+    
+} 

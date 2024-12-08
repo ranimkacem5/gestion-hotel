@@ -86,7 +86,7 @@ public String ShowpageHome() {
         model.addAttribute("pageSize", pagesize);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageroom.getTotalPages());
-        return "list";
+        return "rooms/list-rooms";
     }
     @RequestMapping("/rooms/filter")
     public String getPersonSorted(@RequestParam(required = false, defaultValue = "asc") String sortByPrix,
@@ -100,14 +100,14 @@ public String ShowpageHome() {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", RoomPage.getTotalPages());
-        return "list";
+        return "rooms/list-rooms";
     }
 
     // methode get qui va afficher le formulaire d'ajout
     @RequestMapping("/rooms/create")
     public String showAddRoomForm(Model model) {
         model.addAttribute("roomForm", new RoomForm());
-        return "add-room";
+        return "rooms/add-room";
     }
 
     @RequestMapping(path = "/rooms/create" ,method = RequestMethod.POST)
@@ -116,7 +116,7 @@ public String ShowpageHome() {
                
                 if (br.hasErrors()) {
                     model.addAttribute("error", "form invalide");
-                    return "add-room";
+                    return "rooms/add-room";
                 }
         if (!file.isEmpty()) { 
              logger.error("avant 'l'insertion d'une image 1");
@@ -134,12 +134,12 @@ public String ShowpageHome() {
             logger.error("Erreur lors de l'enregistrement du fichier : ", e);
             e.printStackTrace();
         }
-        this.rommservice.addRoom(new Room(null, roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
+        this.rommservice.addRoom(new Room(null,roomForm.getName(), roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
         roomForm.getCapacity(), roomForm.getPricePerNight(), fileName.toString()));
 
     } else {
         logger.error("image est vide  ");
-        this.rommservice.addRoom(new Room(null, roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
+        this.rommservice.addRoom(new Room(null,roomForm.getName(), roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
         roomForm.getCapacity(), roomForm.getPricePerNight(), null));
     }
        
@@ -152,9 +152,9 @@ public String ShowpageHome() {
     @RequestMapping(path = "/rooms/{id}/edit")
     public String geteditform(@PathVariable Long id, Model model) {
         Room r = rommservice.getRoomById(id);
-        model.addAttribute("roomForm", new RoomForm(r.getStatus(), r.getView(), r.getRoomType(), r.getEquipments(),
+        model.addAttribute("roomForm", new RoomForm(r.getName(),r.getStatus(), r.getView(), r.getRoomType(), r.getEquipments(),
                 r.getCapacity(), r.getPricePerNight(), null));
-        return "edit-room";
+        return "rooms/edit-room";
     }
 
     @RequestMapping(path = "/rooms/{id}/edit" ,method = RequestMethod.POST)
@@ -163,7 +163,7 @@ public String ShowpageHome() {
         Room r = rommservice.getRoomById(id);
         if (bresult.hasErrors()) {
             model.addAttribute("error", "form invalide");
-            return "edit-room";
+            return "rooms/edit-room";
         }
          r.setCapacity(rf.getCapacity());
          r.setEquipments(rf.getEquipements());

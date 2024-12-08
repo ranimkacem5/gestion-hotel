@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Hotel Management</title>
+    <!-- Bootswatch Theme -->
+    <link rel="stylesheet" th:href="@{/webjars/bootswatch/dist/flatly/bootstrap.min.css}" />
+    <!-- Bootstrap Icons -->
+    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css}" rel="stylesheet" />
+</head>
+<body>
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top" style="background-color: rgba(0, 0, 0, 0.7)">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/images/logo.jpg}" class="me-2" style="height: 40px" />
+            </a>
+
+            <!-- Navbar Content -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active text-light" th:href="@{/}">
+                            <i class="bi bi-house-door"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" th:href="@{/rooms}">
+                            <i class="bi bi-calendar-check"></i> Gestion des chambres 
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" th:href="@{/clients}">
+                            <i class="bi bi-tags"></i> Gestion des clients
+                        </a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Right Links -->
+                <ul class="navbar-nav ms-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-light" th:href="@{/login}">
+                            <i class="bi bi-box-arrow-in-right"></i> S'identifier
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

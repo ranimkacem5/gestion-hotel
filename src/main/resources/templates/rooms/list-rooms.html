@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Chambres</title>
-    <link th:replace="layout/default-layout::link">
+    <link th:replace="layout/default-layout-admin::link">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .table th {
@@ -42,7 +42,7 @@
         }
       </script>
 </head>
-<body th:replace="layout/default-layout::body">
+<body th:replace="layout/default-layout-admin::body">
 <div th:fragment="content">
     <div class="container">
         <h1>Liste des Chambres</h1>
@@ -65,6 +65,7 @@
             <thead class="table-dark">
             <tr>
                 <th>N°</th>
+                <th>Name</th>
                 <th>Type</th>
                 <th>Vue</th>
                 <th>Capacité</th>
@@ -77,6 +78,7 @@
             <tbody>
             <tr th:each="room, state : ${rooms}" th:class="${state.even} ? 'table-light' : ''">
                 <td th:text="${state.index + 1}"></td>
+                <td th:text="${room.Name}"></td>
                 <td th:text="${room.roomType}"></td>
                 <td th:text="${room.view}"></td>
                 <td th:text="${room.capacity}"></td>

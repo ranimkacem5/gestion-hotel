@@ -9,14 +9,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor; 
-import java.util.*;
+import com.example.hotelversion2.Web.Models.Bookingstatus;
+import com.example.hotelversion2.Web.Models.Paymentstatus;
 
 @Data
 @NoArgsConstructor
@@ -24,18 +23,12 @@ import java.util.*;
 @Entity
 @Table(name = "Bookings")
 public class Booking {
-  @Id
+   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long Booking_id;
-
-  //???
-   @ManyToMany
-  @JoinTable(
-    name = "booking_room", // Join table to connect bookings and rooms
-    joinColumns = @JoinColumn(name = "booking_id"), // Foreign key for the booking
-    inverseJoinColumns = @JoinColumn(name = "room_id") // Foreign key for the room
-  )
-  private List<Room> rooms; 
+  @ManyToOne
+  @JoinColumn(name = "room_id", nullable = false)  
+  private Room room; 
   @ManyToOne()
   @JoinColumn(name = "customer_id", nullable = false) 
   private Customer customer;
@@ -44,9 +37,11 @@ public class Booking {
   @Column(name="check_out_date",nullable = false)
   private LocalDate check_out_date;
   @Column(name ="payment_status",nullable = false)
-  private String payment_status;
+  @Enumerated(EnumType.STRING)
+  private Paymentstatus payment_status;
   @Column(name="Booking_status",nullable = false)
-  private String Booking_status ;
+  @Enumerated(EnumType.STRING)
+  private Bookingstatus Booking_status ;
   @Column(name="nombrePersonnes",nullable = false)
   private int nombrePersonnes;
   @Column(name = "total_amount", nullable = false)

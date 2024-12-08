@@ -10,6 +10,8 @@ import lombok.*;
 @Getter
 @Setter
 public class RoomForm {
+    @NotBlank(message = "Name  obligatoir")
+    private String Name;
     @NotBlank(message = "status obligatoir")
     private String status;
     @NotBlank(message = "View obligatoir")

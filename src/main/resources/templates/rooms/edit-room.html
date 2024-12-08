@@ -15,34 +15,42 @@
             <a class="btn btn-primary" th:href="@{/rooms}">Back</a>
         </div>
         <!-- L'attribut enctype="multipart/form-data" est obligatoire pour les requêtes qui contiennent des fichiers.-->
-        <form th:action="@{/rooms/create}" th:object="${roomForm}" method="POST" enctype="multipart/form-data">
-
+        <form th:action="@{/rooms/{id}/edit(id=${id})}" th:object="${roomForm}" method="POST" enctype="multipart/form-data"> 
             <!-- Status Field -->
             <div>
-                <label for="status" class="form-label mt-4">
-                    Status
+                <label for="Name" class="form-lablel mt-4">
+                    Name
                 </label>
-                <input type="text" class="form-control mt-2" name="status" th:classappend="${#fields.hasErrors('status')}?is-invalid" th:field="*{status}">
-                <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="invalid-feedback">Status Error</span>
+                <input type="text" class="form-control mt-2" name="Name" th:classappend="${#fields.hasErrors('Name')}?is-invalid"  th:field="*{Name}">
+                <span th:if="${#fields.hasErrors('Name')}" th:errors="*{Name}" class="invalid-feedback">Name Error</span>
             </div>
+        
+            <div>
+                <label for="status" class="form-lablel mt-4">
+                    Name
+                </label>
+                <input type="text" class="form-control mt-2" name="status" th:classappend="${#fields.hasErrors('status')}?is-invalid"  th:field="*{status}">
+                <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="invalid-feedback">Name Error</span>
+            </div>
+        
 
-            <!-- View Field -->
+          
             <div>
                 <label for="view" class="form-label mt-4">
                     View
                 </label>
-                <input type="text"  class="form-control mt-2" name="view" th:classappend="${#fields.hasErrors('view')}?is-invalid" th:field="*{view}">
+                <input type="text" class="form-control mt-2" name="view" th:classappend="${#fields.hasErrors('view')}?is-invalid" th:field="*{view}">
                 <span th:if="${#fields.hasErrors('view')}" th:errors="*{view}" class="invalid-feedback">View Error</span>
             </div>
 
             <!-- Room Type Dropdown -->
             <div class="mb-3">
                 <label for="roomType" class="form-label mt-4">Type de chambre</label>
-                <select class="form-control"  name="roomType" th:field="*{roomType}" required>
+                <select class="form-control" name="roomType" th:field="*{roomType}" required>
                     <option value="">Sélectionner un type</option>
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="SUITE">SUITE</option>
+                    <option value="Single" th:selected="${roomForm.roomType == 'Single'}">Single</option>
+                    <option value="Double" th:selected="${roomForm.roomType == 'Double'}">Double</option>
+                    <option value="SUITE" th:selected="${roomForm.roomType == 'SUITE'}">SUITE</option>
                 </select>
                 <span th:if="${#fields.hasErrors('roomType')}" th:errors="*{roomType}" class="invalid-feedback">Veuillez sélectionner un type de chambre</span>
             </div>
@@ -50,25 +58,23 @@
             <!-- Equipments Textarea -->
             <div class="form-group mb-3">
                 <label for="equipements" class="form-label">Équipements</label>
-                <textarea class="form-control" name="equipements" rows="3" placeholder="Ex: Wi-Fi, Télévision, Mini-bar" required  th:field="*{equipements}"></textarea>
+                <textarea class="form-control" name="equipements" rows="3" placeholder="Ex: Wi-Fi, Télévision, Mini-bar" th:field="*{equipements}" required></textarea>
                 <span th:if="${#fields.hasErrors('equipements')}" th:errors="*{equipements}" class="invalid-feedback">Veuillez fournir une description des équipements.</span>
             </div>
 
             <!-- Capacity Field -->
             <div class="form-group mb-3">
                 <label for="capacity" class="form-label">Capacité</label>
-                <input type="number" class="form-control" name="capacity"  th:classappend="${#fields.hasErrors('capacity')}?is-invalid" th:field="*{capacity}">
+                <input type="number" class="form-control" name="capacity" th:classappend="${#fields.hasErrors('capacity')}?is-invalid" th:field="*{capacity}">
                 <span th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="invalid-feedback">Capacity Error</span>
             </div>
 
             <!-- Price Field -->
             <div>
                 <label for="pricePerNight" class="form-label">Prix</label>
-                <input type="number" class="form-control" name="pricePerNight" th:classappend="${#fields.hasErrors('pricePerNight')}?is-invalid" th:field="*{pricePerNight}"  >
-                <span th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}"  required class="invalid-feedback">Price Error</span>
+                <input type="number" class="form-control" name="pricePerNight" th:classappend="${#fields.hasErrors('pricePerNight')}?is-invalid" th:field="*{pricePerNight}" required>
+                <span th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}" class="invalid-feedback">Price Error</span>
             </div>
-
-            <!-- File Upload -->
             <div>
                 <label class="form-label mt-4" for="file">Photo</label>
                 <input type="file" name="file" class="form-control mt-2">
@@ -76,8 +82,13 @@
 
             <!-- Submit Button -->
             <div class="mt-4">
-                <input class="btn btn-success" type="submit" value="Save">
+                <input class="btn btn-success" type="submit" value="Update">
             </div>
+
+            <!-- View Field -->
+           
+        
+        
         </form>
     </div>
 </body>

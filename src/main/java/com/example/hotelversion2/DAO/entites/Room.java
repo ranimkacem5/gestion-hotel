@@ -22,7 +22,8 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;  
-
+ @Column(name="Name",nullable = false)
+ private String Name;
     @Column(name = "status", nullable = false)
     private String status;
 

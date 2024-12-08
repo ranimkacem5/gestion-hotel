@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulaire de Réservation</title>
+</head>
+<body>
+    <h1>Créer une Réservation</h1>
+    <form th:action="@{/bookings/create}" th:object="${BookingForm}" method="post">
+        <div>
+            <label for="roomId">Chambre :</label>
+            <select th:field="*{roomId}" id="roomId" required>
+                <option value="" disabled selected>-- Sélectionnez une chambre --</option>
+                <option th:each="room : ${rooms}" 
+                        th:value="${room.roomId}" 
+                        th:text="${room.Name}">Chambre</option>
+            </select>
+        </div>
+
+        <!-- Sélection du client -->
+        <div>
+            <label for="customerId">Client :</label>
+            <select th:field="*{customerId}" id="customerId" required>
+                <option value="" disabled selected>-- Sélectionnez un client --</option>
+                <option th:each="customer : ${customers}" 
+                        th:value="${customer.id}" 
+                        th:text="${customer.Name}">Client</option>
+            </select>
+        </div>
+
+        <!-- Date d'arrivée -->
+        <div>
+            <label for="check_in_date">Date d'arrivée :</label>
+            <input type="date" th:field="*{check_in_date}" id="check_in_date" required />
+        </div>
+
+        <!-- Date de départ -->
+        <div>
+            <label for="check_out_date">Date de départ :</label>
+            <input type="date" th:field="*{check_out_date}" id="check_out_date" required />
+        </div>
+
+        <!-- Nombre de personnes -->
+        <div>
+            <label for="nombrePersonnes">Nombre de personnes :</label>
+            <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" min="1" required />
+        </div>
+
+        <!-- Statut de paiement -->
+        <div>
+            <label for="payment_status">Statut de paiement :</label>
+            <select th:field="*{payment_status}" id="payment_status" required>
+                <option value="" disabled selected>-- Sélectionnez un statut --</option>
+                <option th:each="status : ${payment_status}" 
+                        th:value="${status}" 
+                        th:text="${status}">Statut de paiement</option>
+            </select>
+        </div>
+
+        <!-- Statut de réservation -->
+        <div>
+            <label for="booking_status">Statut de réservation :</label>
+            <select th:field="*{booking_status}" id="booking_status" required>
+                <option value="" disabled selected>-- Sélectionnez un statut --</option>
+                <option th:each="status : ${booking_status}" 
+                        th:value="${status}" 
+                        th:text="${status}">Statut de réservation</option>
+            </select>
+        </div>
+
+        <!-- Montant total -->
+        <div>
+            
+
+            <label for="total_amount">Montant total :</label>
+            <input type="number" step="0.01" th:field="*{total_amount}" id="total_amount" required />
+        </div>
+
+        <!-- Bouton de soumission -->
+        <div>
+            <button type="submit">Créer la Réservation</button>
+        </div>
+    </form>
+</body>
+</html>
