@@ -20,7 +20,7 @@ public class BookingForm {
     private Long customerId;
 
     // Liste des chambres
-    @NotEmpty(message = "Sélectionnez au moins une chambre")
+    @NotNull(message = "Sélectionnez au moins une chambre")
     private Long  roomId;
 
     // Date d'arrivée

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Réservations</title>
+    <link th:replace="layout/default-layout-admin::link">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #495057;
+            font-weight: 600;
+            border-bottom: 3px solid #6c757d;
+            padding-bottom: 10px;
+        }
+
+        .table {
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            background-color: #6c757d;
+            color: white;
+            vertical-align: middle;
+            font-weight: 500;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(108, 117, 125, 0.05);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(108, 117, 125, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-action {
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action i {
+            margin-right: 5px;
+        }
+
+        .actions-cell {
+            white-space: nowrap;
+        }
+
+        .stat-badge {
+            font-size: 0.9em;
+            padding: 0.3em 0.6em;
+        }
+
+        .no-bookings-alert {
+            text-align: center;
+            font-size: 1.1em;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
+            color: #6c757d;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-filter input {
+            margin-right: 10px;
+        }
+
+        /* Status Badge Styles */
+        .badge-confirmed {
+            background-color: #28a745;
+        }
+
+        .badge-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-cancelled {
+            background-color: #dc3545;
+        }
+
+        .badge-payment-paid {
+            background-color: #28a745;
+        }
+
+        .badge-payment-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-payment-cancelled {
+            background-color: #dc3545;
+        }
+
+        /* Grey Button Styles */
+        .btn-primary, .btn-add-booking {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-primary:hover, .btn-add-booking:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+
+        .btn-success.btn-action {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-success.btn-action:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+    </style>
+</head>
+<body th:replace="layout/default-layout-admin::body">
+<div th:fragment="content">
+    <div class="container">
+        <h1><i class="fas fa-calendar-check mr-3"></i>Gestion des Réservations</h1>
+        
+        <!-- En-tête avec bouton d'ajout et recherche -->
+        <div class="header-actions">
+            <a href="/bookings/create" class="btn btn-primary btn-add-booking">
+                <i class="fas fa-plus-circle mr-2"></i>Nouvelle Réservation
+            </a>
+            <div class="search-filter">
+                <input type="text" class="form-control" placeholder="Rechercher une réservation" style="width: 250px;">
+                <button class="btn btn-outline-secondary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tableau des réservations -->
+        <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(bookings)}">
+            <thead class="table-dark">
+            <tr>
+                <th>N° Réservation</th>
+                <th>Client</th>
+                <th>Chambre</th>
+                <th>Dates</th>
+                <th>Nombre de Personnes</th>
+                <th>Statut Réservation</th>
+                <th>Statut Paiement</th>
+                <th>Montant Total</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="booking, state : ${bookings}" th:class="${state.even} ? 'table-light' : ''">
+                <td th:text="${booking.booking_id}"></td>
+                <td>
+                    <strong th:text="${booking.customer.lastName + ' ' + booking.customer.name}"></strong>
+                </td>
+                <td th:text="${booking.room.Name}"></td>
+                <td>
+                    <span th:text="${#temporals.format(booking.checkInDate, 'dd/MM/yyyy')} + 
+                                     ' - ' + 
+                                     ${#temporals.format(booking.checkOutDate, 'dd/MM/yyyy')}"></span>
+                </td>
+                <td th:text="${booking.nombrePersonnes}"></td>
+                <td>
+                    <span class="badge stat-badge" 
+                          th:classappend="${booking.bookingStatus == 'CONFIRMED' ? 'badge-confirmed' : 
+                                           booking.bookingStatus == 'PENDING' ? 'badge-pending' : 
+                                           'badge-cancelled'}"
+                          th:text="${booking.bookingStatus}"></span>
+                </td>
+                <td>
+                    <span class="badge stat-badge" 
+                          th:classappend="${booking.paymentStatus == 'PAID' ? 'badge-payment-paid' : 
+                                           booking.paymentStatus == 'PENDING' ? 'badge-payment-pending' : 
+                                           'badge-payment-cancelled'}"
+                          th:text="${booking.paymentStatus}"></span>
+                </td>
+                <td th:text="${#numbers.formatCurrency(booking.totalAmount)}"></td>
+                <td class="actions-cell">
+                    <div class="d-flex">
+                        <form th:action="@{/bookings/{bookingId}/edit(bookingId=${booking.booking_id})}" method="get" class="mr-2">
+                            <button type="submit" class="btn btn-success btn-sm btn-action">
+                                <i class="fas fa-edit"></i>Modifier
+                            </button>
+                        </form>
+                        <form th:action="@{/bookings/{bookingId}/delete(bookingId=${booking.booking_id})}" method="post" th:method="delete">
+                            <button type="submit" class="btn btn-danger btn-sm btn-action" 
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')">
+                                <i class="fas fa-trash"></i>Supprimer
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Message si aucune réservation n'est trouvée -->
+        <div class="no-bookings-alert" th:if="${#lists.isEmpty(bookings)}">
+            <i class="fas fa-info-circle mr-3"></i>Aucune réservation trouvée dans la base de données.
+        </div>
+    </div>
+</body>
+</html>

@@ -2,6 +2,8 @@ package com.example.hotelversion2.Web.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,7 +12,14 @@ import com.example.hotelversion2.Business.Services.BookingService;
 import com.example.hotelversion2.Business.Services.Customerservice;
 import com.example.hotelversion2.Business.Services.RoomServices;
 import com.example.hotelversion2.DAO.entites.Booking;
+import com.example.hotelversion2.DAO.entites.Customer;
+import com.example.hotelversion2.DAO.entites.Room;
 import com.example.hotelversion2.Web.Models.BookingForm;
+import com.example.hotelversion2.Web.Models.Bookingstatus;
+import com.example.hotelversion2.Web.Models.Paymentstatus;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
@@ -26,12 +35,31 @@ public class BookingController {
     this.customerservice=customerservice;
     this.roomServices=roomServices;
   }
+  @RequestMapping(path="", method=RequestMethod.GET)
+  public String ListBooking(Model model) {
+    model.addAttribute("bookings",bookingservice.getAllBookings() );
+      return "bookings/list-booking";
+  }
+  
   @RequestMapping(path="create", method=RequestMethod.GET)
   public String showaddbookingForm(Model model) {
     model.addAttribute("BookingForm", new BookingForm());
     model.addAttribute("rooms",roomServices.getAllRooms());
+    model.addAttribute("payment_status1",   Paymentstatus.values());
+     model.addAttribute("booking_status1", Bookingstatus.values());
     model.addAttribute("customers", customerservice.getallcustommers());
       return "bookings/add-booking";
+  }
+
+  @RequestMapping(path="create", method=RequestMethod.POST)
+  public String create (@Valid @ModelAttribute BookingForm bookingForm,BindingResult br,Model model) {
+    if(br.hasErrors())
+    {return "bookings/list-booking";}
+    Room r= roomServices.getRoomById(bookingForm.getRoomId());
+    Customer c=customerservice.getCustomerbyId(bookingForm.getCustomerId());
+    Booking b =new Booking(null,r,c,bookingForm.getCheck_in_date(),bookingForm.getCheck_out_date(),bookingForm.getPayment_status(),bookingForm.getBooking_status(),bookingForm.getNombrePersonnes(),bookingForm.getTotal_amount());
+    bookingservice.add(b);
+      return "redirect:/bookings";
   }
   
 }

@@ -37,4 +37,9 @@ public void remove(Long id)
 
 }
 
+@Override
+public Booking add(Booking booking) {
+   return bookingRepository.save(booking);
+}
+
 }
