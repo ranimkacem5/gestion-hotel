@@ -24,11 +24,9 @@ public class bookingServiceimpl implements BookingService {
     public List<Booking> getAllBookings() {
         return  bookingRepository.findAll();  }
         
-    public Booking update(Long id)
-    {if(id==null)
-        return null;
-        Booking b=bookingRepository.findById(id).get();
-        return (bookingRepository.save(b));
+    public Booking update(Booking booking)
+    {
+        return (bookingRepository.save(booking));
     }
 public void remove(Long id)
 {

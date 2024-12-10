@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import com.example.hotelversion2.Web.Models.Bookingstatus;
 import com.example.hotelversion2.Web.Models.Paymentstatus;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -61,5 +63,44 @@ public class BookingController {
     bookingservice.add(b);
       return "redirect:/bookings";
   }
+  @RequestMapping(path="/{id}/delete", method=RequestMethod.POST)
+  public String delete(@PathVariable Long id ,Model model ) {
+    
+    bookingservice.remove(id);
+      return "redirect:/bookings";
+  }
+  
+  @RequestMapping(path="/{id}/edit", method=RequestMethod.GET)
+  public String showeditform(@PathVariable Long id , Model model ) {
+    
+   Booking b= bookingservice.getBookingById(id);
+   BookingForm bk =new BookingForm(b.getCustomer().getId(),b.getRoom().getRoomId(),b.getCheckInDate(),b.getCheckOutDate(),b.getPaymentStatus(),b.getBookingStatus(),b.getNombrePersonnes(),b.getTotalAmount());
+   model.addAttribute("BookingForm", bk);  
+   return "edit-booking";
+  }
+  @RequestMapping(path="/{id}/edit", method=RequestMethod.POST)
+  public String edit(@PathVariable Long id ,@ModelAttribute BookingForm bookingform, BindingResult br,Model model) {
+if(br.hasErrors())
+{
+  model.addAttribute("error","invalide input");
+  return"bookings/edit-client";
+}
+
+    Booking b=bookingservice.getBookingById(id);
+Room r=roomServices.getRoomById(bookingform.getRoomId()); 
+Customer c =customerservice.getCustomerbyId(bookingform.getCustomerId());
+b.setBookingStatus(bookingform.getBooking_status());
+b.setPaymentStatus(bookingform.getPayment_status());
+b.setNombrePersonnes(bookingform.getNombrePersonnes());
+b.setTotalAmount(bookingform.getTotal_amount());
+b.setCheckInDate(bookingform.getCheck_in_date());
+b.setCheckOutDate(bookingform.getCheck_out_date());
+b.setCustomer(c);
+b.setRoom(r);
+bookingservice.update(b);
+
+return "redirect:/bookings";
+  }
+  
   
 }
