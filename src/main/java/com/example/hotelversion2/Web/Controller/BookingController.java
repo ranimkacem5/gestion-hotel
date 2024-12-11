@@ -21,7 +21,11 @@ import com.example.hotelversion2.Web.Models.Paymentstatus;
 
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
@@ -31,6 +35,7 @@ public class BookingController {
   public final BookingService bookingservice;
   public final Customerservice customerservice;
   public final RoomServices roomServices;
+  private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
  public BookingController(BookingService bookingservice,Customerservice customerservice, RoomServices roomServices)
   {this.bookingservice=bookingservice;
 
@@ -75,21 +80,33 @@ public class BookingController {
     
    Booking b= bookingservice.getBookingById(id);
    BookingForm bk =new BookingForm(b.getCustomer().getId(),b.getRoom().getRoomId(),b.getCheckInDate(),b.getCheckOutDate(),b.getPaymentStatus(),b.getBookingStatus(),b.getNombrePersonnes(),b.getTotalAmount());
+   bk.setCheck_in_date(b.getCheckInDate());
+   logger.error(b.getCheckInDate().toString());
+   bk.setCheck_out_date(b.getCheckOutDate());
+   System.out.println("Check-in date: " + bk.getCheck_in_date());
+System.out.println("Check-out date: " + bk.getCheck_out_date());
    model.addAttribute("BookingForm", bk);  
-   return "edit-booking";
+   model.addAttribute("id", id);
+   model.addAttribute("rooms", roomServices.getAllRooms());
+   model.addAttribute("customers", customerservice.getallcustommers());
+   model.addAttribute("payment_status1", Paymentstatus.values());
+   model.addAttribute("booking_status1", Bookingstatus.values());
+   return "bookings/edit-booking";
   }
   @RequestMapping(path="/{id}/edit", method=RequestMethod.POST)
-  public String edit(@PathVariable Long id ,@ModelAttribute BookingForm bookingform, BindingResult br,Model model) {
-if(br.hasErrors())
-{
-  model.addAttribute("error","invalide input");
-  return"bookings/edit-client";
-}
+  public String edit(@PathVariable Long id ,@Valid @ModelAttribute() BookingForm bookingform, BindingResult br,Model model) {
+   /*  if(br.hasErrors())
+    {
+      model.addAttribute("errors","invalide input");
+      return"bookings/edit-booking";
+    }*/
 
     Booking b=bookingservice.getBookingById(id);
 Room r=roomServices.getRoomById(bookingform.getRoomId()); 
 Customer c =customerservice.getCustomerbyId(bookingform.getCustomerId());
 b.setBookingStatus(bookingform.getBooking_status());
+System.out.println(b.getCheckInDate());
+System.out.println(b.getCheckOutDate());
 b.setPaymentStatus(bookingform.getPayment_status());
 b.setNombrePersonnes(bookingform.getNombrePersonnes());
 b.setTotalAmount(bookingform.getTotal_amount());

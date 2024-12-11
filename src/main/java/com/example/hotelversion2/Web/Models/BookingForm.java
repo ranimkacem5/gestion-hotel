@@ -5,6 +5,8 @@ package com.example.hotelversion2.Web.Models;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -26,9 +28,11 @@ public class BookingForm {
     // Date d'arrivée
     @NotNull(message = "La date d'arrivée est obligatoire")
     @Future(message = "La date d'arrivée doit être dans le futur")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate check_in_date;
 
     // Date de départ
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "La date de départ est obligatoire")
     private LocalDate check_out_date;
 
