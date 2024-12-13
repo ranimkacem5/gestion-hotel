@@ -79,13 +79,13 @@ public class BookingController {
   public String showeditform(@PathVariable Long id , Model model ) {
     
    Booking b= bookingservice.getBookingById(id);
-   BookingForm bk =new BookingForm(b.getCustomer().getId(),b.getRoom().getRoomId(),b.getCheckInDate(),b.getCheckOutDate(),b.getPaymentStatus(),b.getBookingStatus(),b.getNombrePersonnes(),b.getTotalAmount());
-   bk.setCheck_in_date(b.getCheckInDate());
+   BookingForm bookingform =new BookingForm(b.getCustomer().getId(),b.getRoom().getRoomId(),b.getCheckInDate(),b.getCheckOutDate(),b.getPaymentStatus(),b.getBookingStatus(),b.getNombrePersonnes(),b.getTotalAmount());
+   bookingform.setCheck_in_date(b.getCheckInDate());
    logger.error(b.getCheckInDate().toString());
-   bk.setCheck_out_date(b.getCheckOutDate());
-   System.out.println("Check-in date: " + bk.getCheck_in_date());
-System.out.println("Check-out date: " + bk.getCheck_out_date());
-   model.addAttribute("BookingForm", bk);  
+   bookingform.setCheck_out_date(b.getCheckOutDate());
+   System.out.println("Check-in date: " + bookingform.getCheck_in_date());
+System.out.println("Check-out date: " + bookingform.getCheck_out_date());
+   model.addAttribute("BookingForm", bookingform);  
    model.addAttribute("id", id);
    model.addAttribute("rooms", roomServices.getAllRooms());
    model.addAttribute("customers", customerservice.getallcustommers());
@@ -94,13 +94,13 @@ System.out.println("Check-out date: " + bk.getCheck_out_date());
    return "bookings/edit-booking";
   }
   @RequestMapping(path="/{id}/edit", method=RequestMethod.POST)
-  public String edit(@PathVariable Long id ,@Valid @ModelAttribute() BookingForm bookingform, BindingResult br,Model model) {
-   /*  if(br.hasErrors())
+ public String edit(@PathVariable Long id ,@Valid @ModelAttribute BookingForm bookingform, BindingResult br,Model model) {
+    /*   if(br.hasErrors())
     {
-      model.addAttribute("errors","invalide input");
+      br.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
+      model.addAttribute("error","invalide input");
       return"bookings/edit-booking";
     }*/
-
     Booking b=bookingservice.getBookingById(id);
 Room r=roomServices.getRoomById(bookingform.getRoomId()); 
 Customer c =customerservice.getCustomerbyId(bookingform.getCustomerId());

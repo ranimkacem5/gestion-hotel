@@ -37,10 +37,10 @@ public class BookingForm {
     private LocalDate check_out_date;
 
     // Validation de la date de départ par rapport à la date d'arrivée
-    public boolean isValidDateRange() {
+   /*  public boolean isValidDateRange() {
         return check_out_date != null && check_in_date != null 
                && check_out_date.isAfter(check_in_date);
-    }
+    }*/
 
     // Statut de paiement
     @NotNull(message = "Le statut de paiement est obligatoire")
@@ -53,7 +53,7 @@ public class BookingForm {
     // Nombre de personnes
     @NotNull(message = "Le nombre de personnes est obligatoire")
     @Min(value = 1, message = "Le nombre de personnes doit être au moins 1")
-    @Max(value = 10, message = "Le nombre de personnes ne peut pas dépasser 10")
+    @Max(value = 5, message = "Le nombre de personnes ne peut pas dépasser 10")
     private int nombrePersonnes;
 
     // Montant total

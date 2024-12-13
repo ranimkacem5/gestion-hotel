@@ -80,7 +80,7 @@
 
                 <div class="form-group">
                     <label for="nombrePersonnes" class="form-label">Nombre de personnes :</label>
-                    <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" class="form-control" min="1" />
+                    <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" class="form-control" />
                     <span th:if="${#fields.hasErrors('nombrePersonnes')}" th:errors="*{nombrePersonnes}" class="error"></span>
                 </div>
 
@@ -99,7 +99,7 @@
 
                     <div class="col-md-6 form-group">
                         <label for="booking_status" class="form-label">Statut de réservation :</label>
-                        <select th:field="*{booking_status}" id="booking_status" class="form-select" required>
+                        <select th:field="*{booking_status}" id="booking_status" class="form-select" >
                             <option value="" disabled>-- Sélectionnez un statut --</option>
                             <option th:each="status : ${booking_status1}"
                                     th:value="${status}"
