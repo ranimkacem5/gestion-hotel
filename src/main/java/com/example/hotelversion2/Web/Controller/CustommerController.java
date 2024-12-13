@@ -2,6 +2,8 @@ package com.example.hotelversion2.Web.Controller;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +42,7 @@ import jakarta.validation.constraints.Past;
 @RequestMapping("/clients")
 public class CustommerController {
     // The line `private final Customerservice customerservice;` in the Java code snippet is declaring a private final instance variable named `customerservice` of type `Customerservice`. This variable is used to hold a reference to an instance of the `Customerservice` class, which is a service class responsible for handling operations related to customers in the application.
-   
+    private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
     private final Customerservice customerservice ;
     public CustommerController(@Autowired Customerservice customerservice )
     {
@@ -80,8 +82,12 @@ public String RemoveCustomer(@PathVariable Long id ) {
  @RequestMapping(path="/{id}/edit")
  public String showeditclientform(@PathVariable Long id ,Model model ) {
     Customer c =customerservice.getCustomerbyId(id);
-    model.addAttribute("customerForm", new CustomerForm(c.getName(),c.getLastName(),c.getEmail(),c.getContact(),c.getAddress()));
-   model.addAttribute("id", id);
+    logger.error( c.getName());
+    logger.error(c.getLastName());
+   
+    logger.error( c.getEmail());
+    model.addAttribute("CustomerForm", new CustomerForm(c.getName(),c.getLastName(),c.getEmail(),c.getContact(),c.getAddress()));
+    model.addAttribute("id", id);
 return"clients/edit-client";
 
 }

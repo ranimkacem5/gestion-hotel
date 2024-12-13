@@ -21,6 +21,9 @@ import com.example.hotelversion2.Web.Models.Paymentstatus;
 
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,11 +49,11 @@ public class BookingController {
   public String ListBooking(Model model) {
     model.addAttribute("bookings",bookingservice.getAllBookings() );
       return "bookings/list-booking";
-  }
+  } 
   
   @RequestMapping(path="create", method=RequestMethod.GET)
   public String showaddbookingForm(Model model) {
-    model.addAttribute("BookingForm", new BookingForm());
+    model.addAttribute("bookingForm", new BookingForm());
     model.addAttribute("rooms",roomServices.getAllRooms());
     model.addAttribute("payment_status1",   Paymentstatus.values());
      model.addAttribute("booking_status1", Bookingstatus.values());
@@ -61,10 +64,14 @@ public class BookingController {
   @RequestMapping(path="create", method=RequestMethod.POST)
   public String create (@Valid @ModelAttribute BookingForm bookingForm,BindingResult br,Model model) {
     if(br.hasErrors())
-    {return "bookings/list-booking";}
+    { model.addAttribute("error", "Invalide input");  
+      return "bookings/add-booking";}
+
     Room r= roomServices.getRoomById(bookingForm.getRoomId());
     Customer c=customerservice.getCustomerbyId(bookingForm.getCustomerId());
+    logger.error("bnj");
     Booking b =new Booking(null,r,c,bookingForm.getCheck_in_date(),bookingForm.getCheck_out_date(),bookingForm.getPayment_status(),bookingForm.getBooking_status(),bookingForm.getNombrePersonnes(),bookingForm.getTotal_amount());
+    logger.error(bookingForm.getCheck_in_date().toString());
     bookingservice.add(b);
       return "redirect:/bookings";
   }

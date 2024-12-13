@@ -39,5 +39,8 @@ public void remove(Long id)
 public Booking add(Booking booking) {
    return bookingRepository.save(booking);
 }
+/*public List<Booking> findBookingsByClientName(String clientName) {
+    return bookingRepository.findByCustomer_NameIgnoreCase(clientName);
+}/*/
 
 }

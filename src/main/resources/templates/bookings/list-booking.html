@@ -157,12 +157,25 @@
             <a href="/bookings/create" class="btn btn-primary btn-add-booking">
                 <i class="fas fa-plus-circle mr-2"></i>Nouvelle Réservation
             </a>
+
             <div class="search-filter">
                 <input type="text" class="form-control" placeholder="Rechercher une réservation" style="width: 250px;">
                 <button class="btn btn-outline-secondary" type="button">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
+
+            <!--<form th:action="@{/bookings}" method="get" class="search-filter">
+                <input type="text" 
+                       name="clientName" 
+                       class="form-control" 
+                       placeholder="Rechercher par nom de client" 
+                       style="width: 250px;"
+                       th:value="${param.clientName}">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>-->
         </div>
 
         <!-- Tableau des réservations -->

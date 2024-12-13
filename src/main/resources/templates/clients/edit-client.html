@@ -48,32 +48,32 @@
     </style>
 </head>
 <body>
-    <form id="editCustomerForm" th:action="@{/clients/{id}/edit(id=${id})}" th:object="${customerForm}" method="POST" >
+    <form id="editCustomerForm" th:action="@{/clients/{id}/edit(id=${id})}" th:object="${CustomerForm}" method="POST" >
         <h2>Modifier les informations du client</h2>
        
         <div class="form-group">
             <label for="Name">Nom</label>
-            <input type="text" id="Name" name="Name" required>
+            <input type="text" id="Name" name="Name"  th:field="*{Name}"  required>
         </div>
        
         <div class="form-group">
             <label for="LastName">Prénom</label>
-            <input type="text" id="LastName" name="LastName" required>
+            <input type="text" id="LastName" name="LastName"  th:field ="*{LastName}"required>
         </div>
        
         <div class="form-group">
             <label for="Email">Email</label>
-            <input type="email" id="Email" name="Email" required>
+            <input type="email" id="Email" name="Email" th:field ="*{Email}" required>
         </div>
        
         <div class="form-group">
             <label for="Contact">Téléphone</label>
-            <input type="tel" id="Contact" name="Contact" required>
+            <input type="tel" id="Contact" name="Contact" th:field ="*{Contact}" required>
         </div>
        
         <div class="form-group">
             <label for="Address">Adresse</label>
-            <input type="text" id="Address" name="Address" required>
+            <input type="text" id="Address" name="Address" th:field ="*{Address}" required>
         </div>
        
         <div class="form-actions">

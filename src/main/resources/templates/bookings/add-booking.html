@@ -33,7 +33,7 @@
     <div class="container">
         <div class="booking-form">
             <h1 class="form-title">Créer une Réservation</h1>
-            <form th:action="@{/bookings/create}" th:object="${BookingForm}" method="post">
+            <form th:action="@{/bookings/create}" th:object="${bookingForm}" method="post">
                 <div class="form-group">
                     <label for="roomId" class="form-label">Chambre :</label>
                     <select th:field="*{roomId}" id="roomId" class="form-select" required>
