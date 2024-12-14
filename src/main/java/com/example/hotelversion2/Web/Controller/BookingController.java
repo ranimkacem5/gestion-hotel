@@ -16,18 +16,9 @@ import com.example.hotelversion2.DAO.entites.Room;
 import com.example.hotelversion2.Web.Models.BookingForm;
 import com.example.hotelversion2.Web.Models.Bookingstatus;
 import com.example.hotelversion2.Web.Models.Paymentstatus;
-
 import jakarta.validation.Valid;
-
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Controller
 @RequestMapping("bookings")
 
@@ -44,13 +35,12 @@ public class BookingController {
     this.customerservice=customerservice;
     this.roomServices=roomServices;
   }
-
   @RequestMapping(path="", method=RequestMethod.GET)
   public String ListBooking(Model model) {
     model.addAttribute("bookings",bookingservice.getAllBookings() );
       return "bookings/list-booking";
   } 
-  
+
   @RequestMapping(path="/create", method=RequestMethod.GET)
   public String showaddbookingForm(Model model) {
     model.addAttribute("bookingForm", new BookingForm());
@@ -106,6 +96,7 @@ System.out.println("Check-out date: " + bookingform.getCheck_out_date());
    model.addAttribute("booking_status1", Bookingstatus.values());
    return "bookings/edit-booking";
   }
+
   @RequestMapping(path="/{id}/edit", method=RequestMethod.POST)
  public String edit(@PathVariable Long id ,@Valid @ModelAttribute BookingForm bookingform, BindingResult br,Model model) {
       if(br.hasErrors())
