@@ -110,7 +110,11 @@ System.out.println("Check-out date: " + bookingform.getCheck_out_date());
  public String edit(@PathVariable Long id ,@Valid @ModelAttribute BookingForm bookingform, BindingResult br,Model model) {
       if(br.hasErrors())
     {
-     
+      model.addAttribute("rooms", roomServices.getAllRooms());
+      model.addAttribute("customers", customerservice.getallcustommers());
+      model.addAttribute("payment_status1", Paymentstatus.values());
+      model.addAttribute("booking_status1", Bookingstatus.values());
+         model.addAttribute("error","invalide input");
       
       return"bookings/edit-booking";
     }

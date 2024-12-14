@@ -27,10 +27,9 @@
             text-align: center;
             margin-bottom: 30px;
         }
-        .error {
-            color: red;
-            font-size: 0.875em;
-            margin-top: 5px;
+        .invalid-feedback {
+            display: block;
+            color: red; 
         }
     </style>
 </head>
@@ -38,7 +37,7 @@
     <div class="container">
         <div class="booking-form">
             <h1 class="form-title">Modifier une Réservation</h1>
-            <form th:action="@{/bookings/{id}/edit(id=${id})}" th:object="${BookingForm}" method="post">
+            <form th:action="@{/bookings/{id}/edit(id=${id})}" th:object="${bookingForm}" method="POST">
                 
                 <div class="form-group">
                     <label for="roomId" class="form-label">Chambre :</label>
