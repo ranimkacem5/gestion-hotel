@@ -89,22 +89,21 @@ public String RemoveCustomer(@PathVariable Long id ) {
    
     logger.error( c.getEmail());
     model.addAttribute("CustomerForm", new CustomerForm(c.getName(),c.getLastName(),c.getEmail(),c.getContact(),c.getAddress()));
-    model.addAttribute("id", id);
 return"clients/edit-client";
 
 }
 @RequestMapping(path="{id}/edit", method=RequestMethod.POST)
-public String requestMethodName(@PathVariable Long id ,Model model , @ModelAttribute CustomerForm customerForm,BindingResult br ) {
+public String requestMethodName(@PathVariable Long id ,Model model ,@Valid @ModelAttribute("CustomerForm") CustomerForm  CustomerForm,BindingResult br ) {
 if (br.hasErrors())
 {model.addAttribute("error","Invalid   Input");
     return"clients/edit-client";
 }
 Customer c =customerservice.getCustomerbyId(id);
-c.setName(customerForm.getName());
-c.setLastName(customerForm.getLastName());
-c.setEmail(customerForm.getEmail());
-c.setContact(customerForm.getContact());
-c.setAddress(customerForm.getAddress());
+c.setName(CustomerForm.getName());
+c.setLastName(CustomerForm.getLastName());
+c.setEmail(CustomerForm.getEmail());
+c.setContact(CustomerForm.getContact());
+c.setAddress(CustomerForm.getAddress());
 customerservice.update(c);
     return "redirect:/clients";
 }
