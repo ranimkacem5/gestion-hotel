@@ -49,7 +49,7 @@
                                 th:text="${room.Name}"
                                 th:selected="${room.roomId} == *{roomId}"></option>
                     </select>
-                    <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}" class="error"></span>
+                    <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}"  class="invalid-feedback"></span>
                 </div>
 
                 <div class="form-group">
@@ -61,27 +61,27 @@
                                 th:text="${customer.Name}"
                                 th:selected="${customer.id} == *{customerId}"></option>
                     </select>
-                    <span th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}" class="error"></span>
+                    <span th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}" class="invalid-feedback"></span>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="check_in_date" class="form-label">Date d'arrivée :</label>
                         <input type="date" th:field="*{check_in_date}" id="check_in_date" class="form-control" />
-                        <span th:if="${#fields.hasErrors('check_in_date')}" th:errors="*{check_in_date}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('check_in_date')}" th:errors="*{check_in_date}"  class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-md-6 form-group">
                         <label for="check_out_date" class="form-label">Date de départ :</label>
                         <input type="date" th:field="*{check_out_date}" id="check_out_date" class="form-control" />
-                        <span th:if="${#fields.hasErrors('check_out_date')}" th:errors="*{check_out_date}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('check_out_date')}" th:errors="*{check_out_date}"  class="invalid-feedback"></span>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="nombrePersonnes" class="form-label">Nombre de personnes :</label>
                     <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" class="form-control" />
-                    <span th:if="${#fields.hasErrors('nombrePersonnes')}" th:errors="*{nombrePersonnes}" class="error"></span>
+                    <span th:if="${#fields.hasErrors('nombrePersonnes')}" th:errors="*{nombrePersonnes}"  class="invalid-feedback"></span>
                 </div>
 
                 <div class="row">
@@ -94,7 +94,7 @@
                                     th:text="${status}"
                                     th:selected="${status} == *{payment_status}"></option>
                         </select>
-                        <span th:if="${#fields.hasErrors('payment_status')}" th:errors="*{payment_status}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('payment_status')}" th:errors="*{payment_status}"  class="invalid-feedback"></span>
                     </div>
 
                     <div class="col-md-6 form-group">
@@ -106,7 +106,7 @@
                                     th:text="${status}"
                                     th:selected="${status} == *{booking_status}"></option>
                         </select>
-                        <span th:if="${#fields.hasErrors('booking_status')}" th:errors="*{booking_status}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('booking_status')}" th:errors="*{booking_status}"  class="invalid-feedback"></span>
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@
                     <div class="input-group">
                         <span class="input-group-text">€</span>
                         <input type="number" step="0.01" th:field="*{total_amount}" id="total_amount" class="form-control"  />
-                        <span th:if="${#fields.hasErrors('total_amount')}" th:errors="*{total_amount}" class="error"></span>
+                        <span th:if="${#fields.hasErrors('total_amount')}" th:errors="*{total_amount}" class="invalid-feedback"></span>
                     </div>
                    
                 </div>

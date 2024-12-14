@@ -3,6 +3,7 @@
 <head>
     <title>Formulaire de Réservation</title>
     <!-- Bootstrap CSS -->
+    <link th:replace="~{layout/default-layout-admin::link}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,69 +28,100 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .invalid-feedback {
+            display: block;
+            color: red; 
+        }
     </style>
 </head>
-<body>
-    <div class="container">
+<!--th:replace="~{layout/default-layout-admin::body}"-->
+<body  >
+    <div th:fragment="content">
         <div class="booking-form">
             <h1 class="form-title">Créer une Réservation</h1>
             <form th:action="@{/bookings/create}" th:object="${bookingForm}" method="post">
                 <div class="form-group">
                     <label for="roomId" class="form-label">Chambre :</label>
-                    <select th:field="*{roomId}" id="roomId" class="form-select" required>
+                    <select th:field="*{roomId}" id="roomId" class="form-select" >
                         <option value="" disabled selected>-- Sélectionnez une chambre --</option>
                         <option th:each="room : ${rooms}"
                                 th:value="${room.roomId}"
                                 th:text="${room.Name}">Chambre</option>
                     </select>
+                    <span th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}" class="invalid-feedback">
+                        Erreur: Sélection de chambre requise
+                    </span>
+    
                 </div>
 
                 <div class="form-group">
                     <label for="customerId" class="form-label">Client :</label>
-                    <select th:field="*{customerId}" id="customerId" class="form-select" required>
+                    <select th:field="*{customerId}" id="customerId" class="form-select" >
                         <option value="" disabled selected>-- Sélectionnez un client --</option>
                         <option th:each="customer : ${customers}"
                                 th:value="${customer.id}"
                                 th:text="${customer.Name}">Client</option>
                     </select>
+                    <span th:if="${#fields.hasErrors('customerId')}" th:errors="*{customerId}" class="invalid-feedback">
+                        Erreur: Sélection de client  requise
+                    </span>
+    
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="check_in_date" class="form-label">Date d'arrivée :</label>
-                        <input type="date" th:field="*{check_in_date}" id="check_in_date" class="form-control" required />
+                        <input type="date" th:field="*{check_in_date}" id="check_in_date" class="form-control"  />
+                        <span th:if="${#fields.hasErrors('check_in_date')}" th:errors="*{check_in_date}" class="invalid-feedback">
+                            Erreur: Date d'arrivée requise
+                        </span>
+        
+
                     </div>
 
                     <div class="col-md-6 form-group">
                         <label for="check_out_date" class="form-label">Date de départ :</label>
-                        <input type="date" th:field="*{check_out_date}" id="check_out_date" class="form-control" required />
+                        <input type="date" th:field="*{check_out_date}" id="check_out_date" class="form-control"  />
+                        <span th:if="${#fields.hasErrors('check_out_date')}" th:errors="*{check_out_date}" class="invalid-feedback">
+                            Erreur: Date de départ requise
+                        </span>
+        
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="nombrePersonnes" class="form-label">Nombre de personnes :</label>
-                    <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" class="form-control" min="1" required />
+                    <input type="number" th:field="*{nombrePersonnes}" id="nombrePersonnes" class="form-control"  />
+                    <span th:if="${#fields.hasErrors('nombrePersonnes')}" th:errors="*{nombrePersonnes}" class="invalid-feedback">Erreur: Nombre de personne requis</span>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="payment_status" class="form-label">Statut de paiement :</label>
-                        <select th:field="*{payment_status}" id="payment_status" class="form-select" required>
+                        <select th:field="*{payment_status}" id="payment_status" class="form-select" >
                             <option value="" disabled selected>-- Sélectionnez un statut --</option>
                             <option th:each="status : ${payment_status1}"
                                     th:value="${status}"
                                     th:text="${status}">Statut de paiement</option>
                         </select>
+                        <span th:if="${#fields.hasErrors('payment_status')}" th:errors="*{payment_status}" class="invalid-feedback">
+                            Erreur: Sélection de payment status requise
+                        </span>
+        
                     </div>
 
                     <div class="col-md-6 form-group">
                         <label for="booking_status" class="form-label">Statut de réservation :</label>
-                        <select th:field="*{booking_status}" id="booking_status" class="form-select" required>
+                        <select th:field="*{booking_status}" id="booking_status" class="form-select" >
                             <option value="" disabled selected>-- Sélectionnez un statut --</option>
                             <option th:each="status : ${booking_status1}"
                                     th:value="${status}"
                                     th:text="${status}">Statut de réservation</option>
                         </select>
+                        <span th:if="${#fields.hasErrors('booking_status')}" th:errors="*{booking_status}" class="invalid-feedback">
+                            Erreur: Sélection de booking status requise
+                        </span>
+        
                     </div>
                 </div>
 
@@ -97,7 +129,8 @@
                     <label for="total_amount" class="form-label">Montant total :</label>
                     <div class="input-group">
                         <span class="input-group-text">€</span>
-                        <input type="number" step="0.01" th:field="*{total_amount}" id="total_amount" class="form-control" required />
+                        <input type="number" step="0.01" th:field="*{total_amount}" id="total_amount" class="form-control"  />
+                        <span th:if="${#fields.hasErrors('total_amount')}" th:errors="*{total_amount}" class="invalid-feedback">Erreur: total amount requis</span>
                     </div>
                 </div>
 
