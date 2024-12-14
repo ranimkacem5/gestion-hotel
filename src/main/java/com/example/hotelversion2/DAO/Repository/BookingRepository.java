@@ -10,5 +10,5 @@ import com.example.hotelversion2.DAO.entites.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-   
+
 } 

@@ -37,7 +37,7 @@
     <div class="container">
         <div class="booking-form">
             <h1 class="form-title">Modifier une Réservation</h1>
-            <form th:action="@{/bookings/{id}/edit(id=${id})}" th:object="${bookingForm}" method="POST">
+            <form th:action="@{/bookings/{id}/edit(id=${id})}" th:object="${bookingForm}" method="post">
                 
                 <div class="form-group">
                     <label for="roomId" class="form-label">Chambre :</label>

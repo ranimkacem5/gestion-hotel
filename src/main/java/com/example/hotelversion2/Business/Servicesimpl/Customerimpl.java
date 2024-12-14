@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.hotelversion2.Business.Services.Customerservice;
 import com.example.hotelversion2.DAO.Repository.CustommerRepository;
-import com.example.hotelversion2.DAO.entites.Booking;
 import com.example.hotelversion2.DAO.entites.Customer;
 @Service("Customerimpl")
 public class Customerimpl implements Customerservice{

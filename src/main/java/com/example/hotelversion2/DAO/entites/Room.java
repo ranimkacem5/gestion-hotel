@@ -46,5 +46,8 @@ public class Room {
     private double pricePerNight; 
     @Column(name = "images")
     private String images;
-    //private List<String> images ;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Booking> bookings;
+  
 }

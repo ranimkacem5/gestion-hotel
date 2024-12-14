@@ -29,11 +29,11 @@ public class Booking {
     private Long booking_id;  // Correction : camelCase
 
     @ManyToOne   
-    @JoinColumn(name = "room_id", nullable = false)     
+    @JoinColumn(name = "room_id", nullable = false )     
     private Room room;
 
     @ManyToOne()   
-    @JoinColumn(name = "customer_id", nullable = false)    
+    @JoinColumn(name = "customer_id",  nullable = false)    
     private Customer customer;
 
     @Column(name = "check_in_date", nullable = false)  // Correction : nom de colonne correct

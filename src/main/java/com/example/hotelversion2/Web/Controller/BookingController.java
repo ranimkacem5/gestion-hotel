@@ -88,7 +88,7 @@ public class BookingController {
    bookingform.setCheck_out_date(b.getCheckOutDate());
    System.out.println("Check-in date: " + bookingform.getCheck_in_date());
 System.out.println("Check-out date: " + bookingform.getCheck_out_date());
-   model.addAttribute("BookingForm", bookingform);  
+   model.addAttribute("bookingForm", bookingform);  
    model.addAttribute("id", id);
    model.addAttribute("rooms", roomServices.getAllRooms());
    model.addAttribute("customers", customerservice.getallcustommers());

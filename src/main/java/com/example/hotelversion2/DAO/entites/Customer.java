@@ -26,7 +26,7 @@ public class Customer {
     private String Contact;
     @Column(name="Address",nullable = false)
     private String Address;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer"  ,cascade = CascadeType.ALL,orphanRemoval = true)
     private  List <Booking> booking_history ;
  
 

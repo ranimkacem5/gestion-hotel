@@ -36,8 +36,8 @@ public class Roomserviceimp implements RoomServices {
         return room;
     }
     @Override
-    public void deleteRoomById(Long id) {
-        roomrep.deleteById(id);
+    public void deleteRoom(Room room) {
+        roomrep.delete(room);
         
     }
     @Override

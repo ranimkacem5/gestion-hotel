@@ -27,7 +27,7 @@
         
             <div>
                 <label for="status" class="form-lablel mt-4">
-                    Name
+                  Status
                 </label>
                 <input type="text" class="form-control mt-2" name="status" th:classappend="${#fields.hasErrors('status')}?is-invalid"  th:field="*{status}">
                 <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="invalid-feedback">Name Error</span>

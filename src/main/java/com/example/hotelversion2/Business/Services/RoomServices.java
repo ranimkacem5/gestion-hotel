@@ -27,6 +27,6 @@ Page<Room>getAllRoomPagination(Pageable pageable);
     Room updateRoom(Room room);
 
     // Delete
-    void deleteRoomById(Long id);
+    void deleteRoom(Room room);
    
 }

@@ -74,6 +74,8 @@ customerservice.add(new Customer(null,customerForm.getName(),customerForm.getLas
 @RequestMapping(path="/{id}/delete", method=RequestMethod.POST)
 public String RemoveCustomer(@PathVariable Long id ) {
     Customer c=customerservice.getCustomerbyId(id);
+    logger.error(c.getAddress());
+    
     customerservice.remove(c);
     return "redirect:/clients";
 }
@@ -102,6 +104,7 @@ c.setName(customerForm.getName());
 c.setLastName(customerForm.getLastName());
 c.setEmail(customerForm.getEmail());
 c.setContact(customerForm.getContact());
+c.setAddress(customerForm.getAddress());
 customerservice.update(c);
     return "redirect:/clients";
 }

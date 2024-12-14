@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.hotelversion2.Business.Services.BookingService;
 import com.example.hotelversion2.Business.Services.RoomServices;
 import com.example.hotelversion2.DAO.entites.Room;
 import com.example.hotelversion2.Web.Models.RoomForm;
@@ -45,6 +46,7 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class RoomController {
     public final RoomServices rommservice;
+    public final BookingService bookingService;
     private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
 
 
@@ -54,8 +56,10 @@ public class RoomController {
     // l'application s'exécute (souvent la racine du projet en mode développement).
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/images";
     @Autowired
-    public RoomController(RoomServices roomservice) {
+    public RoomController(RoomServices roomservice ,BookingService bookingService) {
         this.rommservice =roomservice;
+        this.bookingService=bookingService;
+
     }
    /*  @GetMapping("/rooms/filter")
     public String filterRooms(@RequestParam(required = false, defaultValue = "asc") String sortByPrix, Model model) {
@@ -135,12 +139,12 @@ public String ShowpageHome() {
             e.printStackTrace();
         }
         this.rommservice.addRoom(new Room(null,roomForm.getName(), roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
-        roomForm.getCapacity(), roomForm.getPricePerNight(), fileName.toString()));
+        roomForm.getCapacity(), roomForm.getPricePerNight(), fileName.toString(),null));
 
     } else {
         logger.error("image est vide  ");
         this.rommservice.addRoom(new Room(null,roomForm.getName(), roomForm.getStatus(), roomForm.getView(), roomForm.getRoomType(), roomForm.getEquipements(),
-        roomForm.getCapacity(), roomForm.getPricePerNight(), null));
+        roomForm.getCapacity(), roomForm.getPricePerNight(), null,null));
     }
        
         
@@ -165,6 +169,7 @@ public String ShowpageHome() {
             model.addAttribute("error", "form invalide");
             return "rooms/edit-room";
         }
+        r.setName(rf.getName());
          r.setCapacity(rf.getCapacity());
          r.setEquipments(rf.getEquipements());
          r.setPricePerNight(rf.getPricePerNight());
@@ -222,7 +227,7 @@ public String ShowpageHome() {
                 e.printStackTrace();
             }
         }
-        rommservice.deleteRoomById(id);
+        rommservice.deleteRoom(r);
 
         return "redirect:/rooms";
     }
