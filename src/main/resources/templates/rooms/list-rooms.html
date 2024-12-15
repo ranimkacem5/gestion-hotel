@@ -6,66 +6,206 @@
     <title>Liste des Chambres</title>
     <link th:replace="layout/default-layout-admin::link">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .table th {
-            background-color: #6c757d; /* Gris moyen */
-            color: white;
-        }
-
-        .table {
-            border-color: #dee2e6; /* Gris clair */
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f8f9fa; /* Gris très clair */
-        }
-
-        .btn-primary {
-            background-color: #6c757d; /* Gris moyen */
-            border-color: #6c757d;
-        }
-
-        .btn-primary:hover {
-            background-color: #5a6268; /* Gris foncé */
-            border-color: #5a6268;
-        }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-            color: #6c757d; /* Gris moyen */
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <script type="text/javascript">
         function submitForm() {
           document.getElementById("filterForm").submit();
         }
       </script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #495057;
+            font-weight: 600;
+            border-bottom: 3px solid #6c757d;
+            padding-bottom: 10px;
+        }
+
+        .table {
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            background-color: #6c757d;
+            color: white;
+            vertical-align: middle;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(108, 117, 125, 0.05);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(108, 117, 125, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-action {
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action i {
+            margin-right: 5px;
+        }
+
+        .actions-cell {
+            white-space: nowrap;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-filter input {
+            margin-right: 10px;
+        }
+
+        .no-rooms-alert {
+            text-align: center;
+            font-size: 1.1em;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
+            color: #6c757d;
+        }
+
+        .btn-primary, .btn-add-room {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-primary:hover, .btn-add-room:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+
+        .btn-success.btn-action {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-success.btn-action:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+
+        .room-image {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: #d6d8db;
+            color: #6c757d;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #6c757d;
+        }
+
+        .pagination .page-link:hover {
+            color: #495057;
+        }
+
+        .sort-options {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .sort-options label {
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+    </style>
+   
 </head>
 <body th:replace="layout/default-layout-admin::body">
 <div th:fragment="content">
     <div class="container">
-        <h1>Liste des Chambres</h1>
-        <!-- Boutons pour ajouter une chambre et gérer les filtres -->
-        <div class="row mt-3 mb-4">
-            <div class="col-4">
-                <a href="/rooms/create" class="btn btn-primary">Ajouter une Chambre</a>
-            </div>
-            <div class="col-4">
-                <p><strong>Sort by Age:</strong></p>
-                <form th:action="@{/rooms/filter}" method="get" id="filterForm">
-                  <label><input type="radio" name="sortByPrix" value="asc" th:checked="${sortByPrix=='asc'}"
-                      onchange="submitForm()"> Trier par le prix bas </label>
-                  <label><input type="radio" name="sortByPrix" value="desc" th:checked="${sortByPrix=='desc'}"
-                      onchange="submitForm()"> Trier par le prix élevé</label>
-                </form>
+        <h1><i class="fas fa-bed mr-3"></i>Gestion  des Chambres</h1>
+
+        <!-- En-tête avec bouton d'ajout et recherche -->
+        <div class="header-actions">
+            <a href="/rooms/create" class="btn btn-primary btn-add-room">
+                <i class="fas fa-plus-circle mr-2"></i>Ajouter une Chambre
+            </a>
+
+            <form th:action="@{/rooms}" method="get" class="search-filter">
+                <input type="text"
+                       name="roomName"
+                       class="form-control"
+                       placeholder="Rechercher une chambre"
+                       style="width: 250px;"
+                       th:value="${param.roomName}">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
         </div>
-        <!-- Tableau -->
+
+        <!-- Options de tri -->
+        <form id="filterForm" th:action="@{/rooms/filter}" method="get" class="sort-options">
+            <strong>Trier par Prix :</strong>
+            <label><input type="radio" name="sortByPrix" value="asc" th:checked="${sortByPrix=='asc'}"
+                onchange="submitForm()"> Trier par le prix bas </label>
+                <label><input type="radio" name="sortByPrix" value="desc" th:checked="${sortByPrix=='desc'}"
+                    onchange="submitForm()"> Trier par le prix élevé</label>
+        </form>
+
+        <!-- Tableau des chambres -->
         <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(rooms)}">
             <thead class="table-dark">
             <tr>
                 <th>N°</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>Type</th>
                 <th>Vue</th>
                 <th>Capacité</th>
@@ -82,47 +222,58 @@
                 <td th:text="${room.roomType}"></td>
                 <td th:text="${room.view}"></td>
                 <td th:text="${room.capacity}"></td>
-                <td th:text="${room.pricePerNight} + ' €'"></td>
+                <td th:text="${#numbers.formatCurrency(room.pricePerNight)}"></td>
                 <td th:text="${room.status}"></td>
                 <td>
-                    <img th:src="@{|/images/${room.images}|}" alt="Room Image" class="img-fluid" style="max-width: 100px;">
+                    <img th:src="@{|/images/${room.images}|}"
+                         alt="Room Image"
+                         class="room-image img-fluid">
                 </td>
-                <td>
+                <td class="actions-cell">
                     <div class="d-flex">
-                        <form  th:action="@{/rooms/{roomId}/edit(roomId=${room.roomId})}" method="get" class="mr-2">
-                            <button type="submit" class="btn btn-success btn-sm">Modifier</button>
+                        <form th:action="@{/rooms/{roomId}/edit(roomId=${room.roomId})}" method="get" class="mr-2">
+                            <button type="submit" class="btn btn-success btn-sm btn-action">
+                                <i class="fas fa-edit"></i>Modifier
+                            </button>
                         </form>
                         <form th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete">
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">Supprimer</button>
+                            <button type="submit" class="btn btn-danger btn-sm btn-action"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">
+                                <i class="fas fa-trash"></i>Supprimer
+                            </button>
                         </form>
-                        <form  th:action="@{/rooms}" method="get" class="mr-2">
-                            <button type="submit" class="btn btn-success btn-sm">Reserver</button>
-                        </form>
-                        
                     </div>
                 </td>
             </tr>
             </tbody>
         </table>
+
         <!-- Message si aucune chambre n'est trouvée -->
-        <div class="alert alert-warning" th:if="${#lists.isEmpty(rooms)}">
-            Aucune chambre trouvée.
+        <div class="no-rooms-alert" th:if="${#lists.isEmpty(rooms)}">
+            <i class="fas fa-info-circle mr-3"></i>Aucune chambre trouvée dans la base de données.
         </div>
-        <div>
-            <ul class="pagination pagination-sm">
-              <li class="page-item" th:classappend="${currentPage==0?'disabled':''}">
-                <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage-1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage-1}|}">&laquo;</a>
-              </li>
-              <li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"    
-                  th:classappend="${currentPage==index ?'active':''}">
-                <a class="page-link"th:href="${sortByPrix==null}?@{|/rooms?page=${index}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${index}|}" th:text="${index+1}"></a>
-              </li>
-             
-              <li class="page-item"  th:classappend="${currentPage== totalPages -1?'disabled':''}">
-                <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage+1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage+1}|}">&raquo;</a>
-              </li>
-            </ul>
-          </div>
+<nav aria-label="Page navigation" th:if="${not #lists.isEmpty(rooms)}">
+<ul class="pagination">
+<li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+<a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage-1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage-1}|}">
+    &laquo;
+</a>
+</li>
+<li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"    
+            th:classappend="${currentPage==index ?'active':''}">
+          <a class="page-link"th:href="${sortByPrix==null}?@{|/rooms?page=${index}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${index}|}" th:text="${index+1}"></a>
+        </li>
+
+ 
+        <li class="page-item"  th:classappend="${currentPage== totalPages -1?'disabled':''}">
+            <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage+1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage+1}|}">&raquo;</a>
+          </li>
+
+</ul>
+
+
+</nav>
+        
     </div>
 </div>
 </body>

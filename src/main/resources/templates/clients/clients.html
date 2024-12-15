@@ -30,19 +30,26 @@
         }
 
         .table {
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+            margin-bottom: 0.5rem; /* Reduced margin below the table */
         }
-
+        
+        .table td, .table th {
+           /* Further reduced internal padding */
+            line-height: 1.2; /* Compact line height */
+            vertical-align: middle;
+            font-size: 0.9rem; /* Slightly smaller font size */
+        }
+        
         .table th {
             background-color: #6c757d;
             color: white;
             vertical-align: middle;
             font-weight: 500;
+            cursor: pointer;
         }
+       
 
-        .table td {
-            vertical-align: middle;
-        }
+       
 
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(108, 117, 125, 0.05);
@@ -139,48 +146,50 @@
         </div>
 
         <!-- Tableau des clients -->
-        <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(clients)}">
-            <thead class="table-dark">
-            <tr>
-                <th>N°</th>
-                <th>Nom Complet</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Adresse</th>
-                <th>Réservations</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="customer, state : ${clients}" th:class="${state.even} ? 'table-light' : ''">
-                <td th:text="${state.index + 1}"></td>
-                <td>
-                    <strong th:text="${customer.lastName + ' ' + customer.name}"></strong>
-                </td>
-                <td th:text="${customer.email}"></td>
-                <td th:text="${customer.contact}"></td>
-                <td th:text="${customer.address}"></td>
-                <td>
-                    <span class="badge badge-info stat-badge" th:text="${#lists.size(customer.booking_history)} + ' réservations'"></span>
-                </td>
-                <td class="actions-cell">
-                    <div class="d-flex">
-                        <form th:action="@{/clients/{customerId}/edit(customerId=${customer.id})}" method="get" class="mr-2">
-                            <button type="submit" class="btn btn-success btn-sm btn-action">
-                                <i class="fas fa-edit"></i>Modifier
-                            </button>
-                        </form>
-                        <form th:action="@{/clients/{customerId}/delete(customerId=${customer.id})}" method="post" th:method="delete">
-                            <button type="submit" class="btn btn-danger btn-sm btn-action" 
-                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
-                                <i class="fas fa-trash"></i>Supprimer
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div  class="table-responsive mt-4">
+            <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(clients)}">
+                <thead class="table-dark">
+                <tr>
+                    <th>N°</th>
+                    <th>Nom Complet</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Adresse</th>
+                    <th>Réservations</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="customer, state : ${clients}" th:class="${state.even} ? 'table-light' : ''">
+                    <td th:text="${state.index + 1}"></td>
+                    <td>
+                        <strong th:text="${customer.lastName + ' ' + customer.name}"></strong>
+                    </td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.contact}"></td>
+                    <td th:text="${customer.address}"></td>
+                    <td>
+                        <span class="badge badge-info stat-badge" th:text="${#lists.size(customer.booking_history)} + ' réservations'"></span>
+                    </td>
+                    <td class="actions-cell">
+                        <div class="d-flex">
+                            <form th:action="@{/clients/{customerId}/edit(customerId=${customer.id})}" method="get" class="mr-2">
+                                <button type="submit" class="btn btn-success btn-sm btn-action">
+                                    <i class="fas fa-edit"></i>Modifier
+                                </button>
+                            </form>
+                            <form th:action="@{/clients/{customerId}/delete(customerId=${customer.id})}" method="post" th:method="delete">
+                                <button type="submit" class="btn btn-danger btn-sm btn-action" 
+                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
+                                    <i class="fas fa-trash"></i>Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- Message si aucun client n'est trouvé -->
         <div class="no-clients-alert" th:if="${#lists.isEmpty(clients)}">

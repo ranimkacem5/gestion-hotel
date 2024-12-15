@@ -6,85 +6,110 @@
     <script type="text/javascript"></script>
     
     <link th:replace="~{layout/default-layout-admin::link}">
+    <style>
+        body {
+            background-color: #f4f6f9;
+           
+        }
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            margin-top: 20px;
+            
+          
+        }
+        .form-group {
+            margin-bottom: 15px;
+            
+           
+        }
+        .form-title {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .invalid-feedback {
+            display: block;
+            color: red; 
+        }
+        .cnt{
+           
+        }
+    </style>
 </head>
-<!-- th:replace="layout/default-layout::body "-->
-<body th:replace="~{layout/default-layout-admin::body}">
-    <!-- th:fragment="content" -->   
-    <div th:fragment="content">
-        <div class="mt-3 mb-4">
-            <a class="btn btn-primary" th:href="@{/rooms}">Back</a>
+<body th:replace="layout/default-layout-admin::body">
+    <div th:fragment="content" class="cnt" >
+        <div class="container">
+            <h1 class="form-title">Ajouter une Chambre</h1>
+            <form th:action="@{/rooms/create}" th:object="${roomForm}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="Name" class="form-label">Nom</label>
+                    <input type="text" class="form-control" name="Name" th:classappend="${#fields.hasErrors('Name')}?is-invalid" th:field="*{Name}">
+                    <span th:if="${#fields.hasErrors('Name')}" th:errors="*{Name}" class="invalid-feedback">Name Error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="status" class="form-label">Statut</label>
+                    <input type="text" class="form-control" name="status" th:classappend="${#fields.hasErrors('status')}?is-invalid" th:field="*{status}">
+                    <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="invalid-feedback">Status Error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="view" class="form-label">Vue</label>
+                    <input type="text" class="form-control" name="view" th:classappend="${#fields.hasErrors('view')}?is-invalid" th:field="*{view}">
+                    <span th:if="${#fields.hasErrors('view')}" th:errors="*{view}" class="invalid-feedback">View Error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomType" class="form-label">Type de chambre</label>
+                    <select class="form-select" name="roomType" th:field="*{roomType}" required>
+                        <option value="" disabled>-- Sélectionner un type --</option>
+                        <option value="Single">Single</option>
+                        <option value="Double">Double</option>
+                        <option value="SUITE">SUITE</option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('roomType')}" th:errors="*{roomType}" class="invalid-feedback">Veuillez sélectionner un type de chambre</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="equipements" class="form-label">Équipements</label>
+                    <textarea class="form-control" name="equipements" rows="3" placeholder="Ex: Wi-Fi, Télévision, Mini-bar" th:field="*{equipements}" required></textarea>
+                    <span th:if="${#fields.hasErrors('equipements')}" th:errors="*{equipements}" class="invalid-feedback">Veuillez fournir une description des équipements.</span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="capacity" class="form-label">Capacité</label>
+                        <input type="number" class="form-control" name="capacity" th:classappend="${#fields.hasErrors('capacity')}?is-invalid" th:field="*{capacity}">
+                        <span th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="invalid-feedback">Capacity Error</span>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label for="pricePerNight" class="form-label">Prix par nuit</label>
+                        <div class="input-group">
+                            <span class="input-group-text">€</span>
+                            <input type="number" step="0.01" class="form-control" name="pricePerNight" th:classappend="${#fields.hasErrors('pricePerNight')}?is-invalid" th:field="*{pricePerNight}" required>
+                            <span th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}" class="invalid-feedback">Price Error</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="file" class="form-label">Photo</label>
+                    <input type="file" name="file" class="form-control" required>
+                </div>
+
+                <div class="text-center mt-4 d-flex justify-content-center gap-3">
+                    <a th:href="@{/rooms}" class="btn btn-secondary btn-lg">Annuler</a>
+                    <button type="submit" class="btn btn-primary btn-lg">Ajouter la Chambre</button>
+                </div>
+            </form>
         </div>
-        <!-- L'attribut enctype="multipart/form-data" est obligatoire pour les requêtes qui contiennent des fichiers.-->
-        <form th:action="@{/rooms/create}" th:object="${roomForm}" method="POST" enctype="multipart/form-data">
-            <div>
-                <label for="status" class="form-label mt-4">
-                    Name
-                </label>
-                <input type="text" class="form-control mt-2" name="Name" th:classappend="${#fields.hasErrors('Name')}?is-invalid" th:field="*{Name}">
-                <span th:if="${#fields.hasErrors('Name')}" th:errors="*{Name}" class="invalid-feedback">Name Error</span>
-            </div>
-            <!-- Status Field -->
-            <div>
-                <label for="status" class="form-label mt-4">
-                    Status
-                </label>
-                <input type="text" class="form-control mt-2" name="status" th:classappend="${#fields.hasErrors('status')}?is-invalid" th:field="*{status}">
-                <span th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="invalid-feedback">Status Error</span>
-            </div>
-
-            <!-- View Field -->
-            <div>
-                <label for="view" class="form-label mt-4">
-                    View
-                </label>
-                <input type="text"  class="form-control mt-2" name="view" th:classappend="${#fields.hasErrors('view')}?is-invalid" th:field="*{view}">
-                <span th:if="${#fields.hasErrors('view')}" th:errors="*{view}" class="invalid-feedback">View Error</span>
-            </div>
-
-            <!-- Room Type Dropdown -->
-            <div class="mb-3">
-                <label for="roomType" class="form-label mt-4">Type de chambre</label>
-                <select class="form-control"  name="roomType" th:field="*{roomType}" required>
-                    <option value="">Sélectionner un type</option>
-                    <option value="Single">Single</option>
-                    <option value="Double">Double</option>
-                    <option value="SUITE">SUITE</option>
-                </select>
-                <span th:if="${#fields.hasErrors('roomType')}" th:errors="*{roomType}" class="invalid-feedback">Veuillez sélectionner un type de chambre</span>
-            </div>
-       
-            <!-- Equipments Textarea -->
-            <div class="form-group mb-3">
-                <label for="equipements" class="form-label">Équipements</label>
-                <textarea class="form-control" name="equipements" rows="3" placeholder="Ex: Wi-Fi, Télévision, Mini-bar" required  th:field="*{equipements}"></textarea>
-                <span th:if="${#fields.hasErrors('equipements')}" th:errors="*{equipements}" class="invalid-feedback">Veuillez fournir une description des équipements.</span>
-            </div>
-
-            <!-- Capacity Field -->
-            <div class="form-group mb-3">
-                <label for="capacity" class="form-label">Capacité</label>
-                <input type="number" class="form-control" name="capacity"  th:classappend="${#fields.hasErrors('capacity')}?is-invalid" th:field="*{capacity}">
-                <span th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="invalid-feedback">Capacity Error</span>
-            </div>
-
-            <!-- Price Field -->
-            <div>
-                <label for="pricePerNight" class="form-label">Prix</label>
-                <input type="number" class="form-control" name="pricePerNight" th:classappend="${#fields.hasErrors('pricePerNight')}?is-invalid" th:field="*{pricePerNight}"  >
-                <span th:if="${#fields.hasErrors('pricePerNight')}" th:errors="*{pricePerNight}"  required class="invalid-feedback">Price Error</span>
-            </div>
-
-            <!-- File Upload -->
-            <div>
-                <label class="form-label mt-4" for="file">Photo</label>
-                <input type="file" name="file" class="form-control mt-2">
-            </div>
-
-            <!-- Submit Button -->
-            <div class="mt-4">
-                <input class="btn btn-success" type="submit" value="Save">
-            </div>
-        </form>
     </div>
 </body>
 </html>
+
