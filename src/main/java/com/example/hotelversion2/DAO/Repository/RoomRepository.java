@@ -2,6 +2,8 @@ package com.example.hotelversion2.DAO.Repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByPricePerNightLessThan(double pricePerNight);  
     List<Room> findByCapacity(int capacity);  
     List<Room> findByView(String view);
+    Page<Room> findByNameContainingIgnoreCase(String name, Pageable pageable);
+  
+   
 }

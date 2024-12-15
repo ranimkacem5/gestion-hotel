@@ -7,6 +7,11 @@
     <link th:replace="layout/default-layout-admin::link">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript">
+        function submitForm() {
+          document.getElementById("filterForm").submit();
+        }
+    </script>
     <style>
         body {
             background-color: #f4f6f9;
@@ -30,16 +35,9 @@
         }
 
         .table {
-            margin-bottom: 0.5rem; /* Reduced margin below the table */
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
         }
-        
-        .table td, .table th {
-           /* Further reduced internal padding */
-            line-height: 1.2; /* Compact line height */
-            vertical-align: middle;
-            font-size: 0.9rem; /* Slightly smaller font size */
-        }
-        
+
         .table th {
             background-color: #6c757d;
             color: white;
@@ -47,9 +45,10 @@
             font-weight: 500;
             cursor: pointer;
         }
-       
 
-       
+        .table td {
+            vertical-align: middle;
+        }
 
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(108, 117, 125, 0.05);
@@ -80,6 +79,13 @@
             padding: 0.3em 0.6em;
         }
 
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .no-clients-alert {
             text-align: center;
             font-size: 1.1em;
@@ -87,13 +93,6 @@
             background-color: #f8f9fa;
             border: 2px dashed #6c757d;
             color: #6c757d;
-        }
-
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
         }
 
         .search-filter {
@@ -105,7 +104,21 @@
             margin-right: 10px;
         }
 
-        /* Grey Button Styles */
+        .sort-options {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .sort-options label {
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
         .btn-primary, .btn-add-client {
             background-color: #6c757d;
             border-color: #6c757d;
@@ -125,6 +138,30 @@
             background-color: #5a6268;
             border-color: #5a6268;
         }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: #d6d8db;
+            color: #6c757d;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #6c757d;
+        }
+
+        .pagination .page-link:hover {
+            color: #495057;
+        }
     </style>
 </head>
 <body th:replace="layout/default-layout-admin::body">
@@ -137,18 +174,57 @@
             <a href="/clients/create" class="btn btn-primary btn-add-client">
                 <i class="fas fa-plus-circle mr-2"></i>Ajouter un Client
             </a>
-            <div class="search-filter">
-                <input type="text" class="form-control" placeholder="Rechercher un client" style="width: 250px;">
-                <button class="btn btn-outline-secondary" type="button">
+            <form th:action="@{/clients}" method="get" class="search-filter">
+                <input
+                    type="text"
+                    name="EmailCustomer"
+                    class="form-control"
+                    placeholder="Rechercher un client"
+                    style="width: 250px"
+                    th:value="${EmailCustomer}"
+                />
+                <button class="btn btn-outline-secondary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
-            </div>
+            </form>
         </div>
 
+        <!-- Options de tri -->
+        <form
+            id="filterForm"
+            th:action="@{/clients/filter}"
+            method="get"
+            class="sort-options"
+        >
+            <strong>Trier par Email :</strong>
+            <label>
+                <input
+                    type="radio"
+                    name="sortByEmail"
+                    value="asc"
+                    th:checked="${sortByEmail=='asc'}"
+                    onchange="submitForm()"
+                />
+                Trier par Email (A-Z)
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="sortByEmail"
+                    value="desc"
+                    th:checked="${sortByEmail=='desc'}"
+                    onchange="submitForm()"
+                />
+                Trier par Email (Z-A)
+            </label>
+        </form>
+
         <!-- Tableau des clients -->
-        <div  class="table-responsive mt-4">
-            <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(clients)}">
-                <thead class="table-dark">
+        <table
+            class="table table-hover table-striped"
+            th:unless="${#lists.isEmpty(clients)}"
+        >
+            <thead class="table-dark">
                 <tr>
                     <th>N°</th>
                     <th>Nom Complet</th>
@@ -158,43 +234,141 @@
                     <th>Réservations</th>
                     <th>Actions</th>
                 </tr>
-                </thead>
-                <tbody>
-                <tr th:each="customer, state : ${clients}" th:class="${state.even} ? 'table-light' : ''">
+            </thead>
+            <tbody>
+                <tr
+                    th:each="customer, state : ${clients}"
+                    th:class="${state.even} ? 'table-light' : ''"
+                >
                     <td th:text="${state.index + 1}"></td>
-                    <td>
-                        <strong th:text="${customer.lastName + ' ' + customer.name}"></strong>
-                    </td>
+                    <td th:text="${customer.lastName + ' ' + customer.name}"></td>
                     <td th:text="${customer.email}"></td>
                     <td th:text="${customer.contact}"></td>
                     <td th:text="${customer.address}"></td>
                     <td>
-                        <span class="badge badge-info stat-badge" th:text="${#lists.size(customer.booking_history)} + ' réservations'"></span>
+                        <span 
+                            class="badge badge-info stat-badge" 
+                            th:text="${#lists.size(customer.booking_history)} + ' réservations'"
+                        ></span>
                     </td>
                     <td class="actions-cell">
                         <div class="d-flex">
-                            <form th:action="@{/clients/{customerId}/edit(customerId=${customer.id})}" method="get" class="mr-2">
-                                <button type="submit" class="btn btn-success btn-sm btn-action">
+                            <form 
+                                th:action="@{/clients/{customerId}/edit(customerId=${customer.id})}" 
+                                method="get" 
+                                class="mr-2"
+                            >
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-success btn-sm btn-action"
+                                >
                                     <i class="fas fa-edit"></i>Modifier
                                 </button>
                             </form>
-                            <form th:action="@{/clients/{customerId}/delete(customerId=${customer.id})}" method="post" th:method="delete">
-                                <button type="submit" class="btn btn-danger btn-sm btn-action" 
-                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')">
+                            <form 
+                                th:action="@{/clients/{customerId}/delete(customerId=${customer.id})}" 
+                                method="post" 
+                                th:method="delete"
+                            >
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-danger btn-sm btn-action"
+                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?')"
+                                >
                                     <i class="fas fa-trash"></i>Supprimer
                                 </button>
                             </form>
                         </div>
                     </td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
 
         <!-- Message si aucun client n'est trouvé -->
         <div class="no-clients-alert" th:if="${#lists.isEmpty(clients)}">
             <i class="fas fa-info-circle mr-3"></i>Aucun client trouvé dans la base de données.
         </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" th:if="${not #lists.isEmpty(clients)}">
+            <ul class="pagination">
+                <!-- Previous Page -->
+                <li
+                    class="page-item"
+                    th:classappend="${currentPage == 0 ? 'disabled' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail == null}"
+                        th:href="@{/clients(page=${currentPage - 1})}"
+                    >&laquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer != null and sortByEmail == null}"
+                        th:href="@{/clients(page=${currentPage - 1}, EmailCustomer=${EmailCustomer})}"
+                    >&laquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail != null}"
+                        th:href="@{/clients/filter(sortByEmail=${sortByEmail}, page=${currentPage - 1})}"
+                    >&laquo;</a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li
+                    th:each="index : ${#numbers.sequence(0, totalPages - 1)}"
+                    class="page-item"
+                    th:classappend="${currentPage == index ? 'active' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail == null}"
+                        th:href="@{/clients(page=${index})}"
+                        th:text="${index + 1}"
+                    ></a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer != null and sortByEmail == null}"
+                        th:href="@{/clients(page=${index}, EmailCustomer=${EmailCustomer})}"
+                        th:text="${index + 1}"
+                    ></a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail != null}"
+                        th:href="@{/clients/filter(sortByEmail=${sortByEmail}, page=${index})}"
+                        th:text="${index + 1}"
+                    ></a>
+                </li>
+
+                <!-- Next Page -->
+                <li
+                    class="page-item"
+                    th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail == null}"
+                        th:href="@{/clients(page=${currentPage + 1})}"
+                    >&raquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer != null and sortByEmail == null}"
+                        th:href="@{/clients(page=${currentPage + 1}, EmailCustomer=${EmailCustomer})}"
+                    >&raquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${EmailCustomer == null and sortByEmail != null}"
+                        th:href="@{/clients/filter(sortByEmail=${sortByEmail}, page=${currentPage + 1})}"
+                    >&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 </body>

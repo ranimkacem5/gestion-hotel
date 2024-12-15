@@ -16,16 +16,16 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name="Name",nullable = false)
-    private  String Name;
+    @Column(name="name",nullable = false)
+    private  String name;
     @Column(name="LastName",nullable = false)
     private  String LastName;
-    @Column(name="Email",nullable = false )
-    private String Email;
-    @Column(name="Contact" ,nullable  =false)
-    private String Contact;
+    @Column(name="email",nullable = false )
+    private String email;
+    @Column(name="contact" ,nullable  =false)
+    private String contact;
     @Column(name="Address",nullable = false)
-    private String Address;
+    private String address;
     @OneToMany(mappedBy = "customer"  ,cascade = CascadeType.ALL,orphanRemoval = true)
     private  List <Booking> booking_history ;
  

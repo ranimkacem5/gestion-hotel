@@ -81,17 +81,60 @@ public class RoomController {
 @GetMapping("/")
 public String ShowpageHome() {
     return ("homepage");
-}
-
+}/* 
     @GetMapping("/rooms")
-    public String getAllRooms(@RequestParam (defaultValue="0") int page, @RequestParam (defaultValue="3")int pagesize ,Model model) {
+    public String getAllRooms(@RequestParam (defaultValue="0") int page,
+     @RequestParam (defaultValue="3")int pagesize ,
+     @RequestParam(required = false) String roomName,
+     Model model)
+      {
+        Page<Room>pageroom=this.rommservice.searchRoomsByName(roomName,PageRequest.of(page, pagesize));
+        model.addAttribute("rooms", pageroom.getContent());
+        model.addAttribute("pageSize", pagesize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("roomName", roomName);
+        model.addAttribute("totalPages", pageroom.getTotalPages());
+        return "rooms/list-rooms";*/
+
+
+   /*  @GetMapping("/rooms")
+    public String getAllRooms(@RequestParam (defaultValue="0") int page,
+     @RequestParam (defaultValue="3")int pagesize ,
+     Model model)
+      {
         Page<Room>pageroom=this.rommservice.getAllRoomPagination(PageRequest.of(page, pagesize));
         model.addAttribute("rooms", pageroom.getContent());
         model.addAttribute("pageSize", pagesize);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", pageroom.getTotalPages());
         return "rooms/list-rooms";
+    }*/
+     @GetMapping("/rooms")
+public String getAllRooms(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "3") int pageSize,
+        @RequestParam(required = false) String roomName,
+        Model model) {
+
+    Page<Room> pageRoom;
+
+    if (roomName != null && !roomName.isEmpty()) {
+        // Rechercher par nom de chambre
+        pageRoom = this.rommservice.searchRoomsByName(roomName, PageRequest.of(page, pageSize));
+    } else {
+        // Pagination classique sans recherche
+        pageRoom = this.rommservice.getAllRoomPagination(PageRequest.of(page, pageSize));
     }
+
+    model.addAttribute("rooms", pageRoom.getContent());
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", pageRoom.getTotalPages());
+    model.addAttribute("roomName", roomName);
+
+    return "rooms/list-rooms";
+}
+
     @RequestMapping("/rooms/filter")
     public String getPersonSorted(@RequestParam(required = false, defaultValue = "asc") String sortByPrix,
             @RequestParam(defaultValue = "0") int page,
@@ -152,6 +195,7 @@ public String ShowpageHome() {
         return "redirect:/rooms";
 
     }
+    
 
     @RequestMapping(path = "/rooms/{id}/edit")
     public String geteditform(@PathVariable Long id, Model model) {

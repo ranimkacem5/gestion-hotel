@@ -28,5 +28,5 @@ Page<Room>getAllRoomPagination(Pageable pageable);
 
     // Delete
     void deleteRoom(Room room);
-   
+   Page<Room> searchRoomsByName(String roomName, Pageable pageable);
 }

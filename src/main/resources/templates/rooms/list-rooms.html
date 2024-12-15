@@ -1,184 +1,225 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liste des Chambres</title>
-    <link th:replace="layout/default-layout-admin::link">
+    <link th:replace="layout/default-layout-admin::link" />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
     <script type="text/javascript">
-        function submitForm() {
-          document.getElementById("filterForm").submit();
-        }
-      </script>
+      function submitForm() {
+        document.getElementById("filterForm").submit();
+      }
+    </script>
     <style>
-        body {
-            background-color: #f4f6f9;
-        }
+      body {
+        background-color: #f4f6f9;
+      }
 
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin-top: 20px;
-        }
+      .container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-top: 20px;
+      }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #495057;
-            font-weight: 600;
-            border-bottom: 3px solid #6c757d;
-            padding-bottom: 10px;
-        }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #495057;
+        font-weight: 600;
+        border-bottom: 3px solid #6c757d;
+        padding-bottom: 10px;
+      }
 
-        .table {
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-        }
+      .table {
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+      }
 
-        .table th {
-            background-color: #6c757d;
-            color: white;
-            vertical-align: middle;
-            font-weight: 500;
-            cursor: pointer;
-        }
+      .table th {
+        background-color: #6c757d;
+        color: white;
+        vertical-align: middle;
+        font-weight: 500;
+        cursor: pointer;
+      }
 
-        .table td {
-            vertical-align: middle;
-        }
+      .table td {
+        vertical-align: middle;
+      }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(108, 117, 125, 0.05);
-        }
+      .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(108, 117, 125, 0.05);
+      }
 
-        .table-hover tbody tr:hover {
-            background-color: rgba(108, 117, 125, 0.1);
-            transition: background-color 0.3s ease;
-        }
+      .table-hover tbody tr:hover {
+        background-color: rgba(108, 117, 125, 0.1);
+        transition: background-color 0.3s ease;
+      }
 
-        .btn-action {
-            margin-right: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      .btn-action {
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .btn-action i {
-            margin-right: 5px;
-        }
+      .btn-action i {
+        margin-right: 5px;
+      }
 
-        .actions-cell {
-            white-space: nowrap;
-        }
+      .actions-cell {
+        white-space: nowrap;
+      }
 
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+      .stat-badge {
+        font-size: 0.9em;
+        padding: 0.3em 0.6em;
+    }
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-        .search-filter {
-            display: flex;
-            align-items: center;
-        }
+      .no-clients-alert {
+        text-align: center;
+        font-size: 1.1em;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 2px dashed #6c757d;
+        color: #6c757d;
+    }
 
-        .search-filter input {
-            margin-right: 10px;
-        }
+      .search-filter {
+        display: flex;
+        align-items: center;
+      }
 
-        .no-rooms-alert {
-            text-align: center;
-            font-size: 1.1em;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border: 2px dashed #6c757d;
-            color: #6c757d;
-        }
+      .search-filter input {
+        margin-right: 10px;
+      }
 
-        .btn-primary, .btn-add-room {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
+      .no-rooms-alert {
+        text-align: center;
+        font-size: 1.1em;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 2px dashed #6c757d;
+        color: #6c757d;
+      }
 
-        .btn-primary:hover, .btn-add-room:hover {
-            background-color: #5a6268;
-            border-color: #5a6268;
-        }
+      .btn-primary,
+      .btn-add-room {
+        background-color: #6c757d;
+        border-color: #6c757d;
+      }
 
-        .btn-success.btn-action {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
+      .btn-primary:hover,
+      .btn-add-room:hover {
+        background-color: #5a6268;
+        border-color: #5a6268;
+      }
 
-        .btn-success.btn-action:hover {
-            background-color: #5a6268;
-            border-color: #5a6268;
-        }
+      .btn-success.btn-action {
+        background-color: #6c757d;
+        border-color: #6c757d;
+      }
 
-        .room-image {
-            max-width: 100px;
-            max-height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
+      .btn-success.btn-action:hover {
+        background-color: #5a6268;
+        border-color: #5a6268;
+      }
 
-        .pagination {
-            justify-content: center;
-            margin-top: 20px;
-        }
+      .room-image {
+        max-width: 100px;
+        max-height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
 
-        .pagination .page-item.disabled .page-link {
-            background-color: #d6d8db;
-            color: #6c757d;
-        }
+      .pagination {
+        justify-content: center;
+        margin-top: 20px;
+      }
 
-        .pagination .page-item.active .page-link {
-            background-color: #6c757d;
-            border-color: #6c757d;
-            color: white;
-        }
+      .pagination .page-item.disabled .page-link {
+        background-color: #d6d8db;
+        color: #6c757d;
+      }
 
-        .pagination .page-link {
-            color: #6c757d;
-        }
+      .pagination .page-item.active .page-link {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+      }
 
-        .pagination .page-link:hover {
-            color: #495057;
-        }
+      .pagination .page-link {
+        color: #6c757d;
+      }
 
-        .sort-options {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-        }
+      .pagination .page-link:hover {
+        color: #495057;
+      }
 
-        .sort-options label {
-            margin-right: 10px;
-            margin-bottom: 0;
-        }
+      .sort-options {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+      }
+      .btn-primary, .btn-add-client {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-primary:hover, .btn-add-client:hover {
+        background-color: #5a6268;
+        border-color: #5a6268;
+    }
+
+    .btn-success.btn-action {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-success.btn-action:hover {
+        background-color: #5a6268;
+        border-color: #5a6268;
+    }
+
+      .sort-options label {
+        margin-right: 10px;
+        margin-bottom: 0;
+      }
     </style>
-   
-</head>
-<body th:replace="layout/default-layout-admin::body">
-<div th:fragment="content">
-    <div class="container">
-        <h1><i class="fas fa-bed mr-3"></i>Gestion  des Chambres</h1>
+  </head>
+  <body th:replace="layout/default-layout-admin::body">
+    <div th:fragment="content">
+      <div class="container">
+        <h1><i class="fas fa-bed mr-3"></i>Gestion des Chambres</h1>
 
         <!-- En-tête avec bouton d'ajout et recherche -->
         <div class="header-actions">
-            <a href="/rooms/create" class="btn btn-primary btn-add-room">
-                <i class="fas fa-plus-circle mr-2"></i>Ajouter une Chambre
-            </a>
+          <a href="/rooms/create" class="btn btn-primary btn-add-room">
+            <i class="fas fa-plus-circle mr-2"></i>Ajouter une Chambre
+          </a>
 
-            <form th:action="@{/rooms}" method="get" class="search-filter">
+          <!--<form th:action="@{/rooms}" method="get" class="search-filter">
                 <input type="text"
                        name="roomName"
                        class="form-control"
@@ -188,93 +229,219 @@
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
-            </form>
+            </form>-->
+          <form th:action="@{/rooms}" method="get" class="search-filter">
+            <input
+              type="text"
+              name="roomName"
+              class="form-control"
+              placeholder="Rechercher une chambre"
+              style="width: 250px"
+              th:value="${roomName}"
+            />
+            <button class="btn btn-outline-secondary" type="submit">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
         </div>
 
         <!-- Options de tri -->
-        <form id="filterForm" th:action="@{/rooms/filter}" method="get" class="sort-options">
-            <strong>Trier par Prix :</strong>
-            <label><input type="radio" name="sortByPrix" value="asc" th:checked="${sortByPrix=='asc'}"
-                onchange="submitForm()"> Trier par le prix bas </label>
-                <label><input type="radio" name="sortByPrix" value="desc" th:checked="${sortByPrix=='desc'}"
-                    onchange="submitForm()"> Trier par le prix élevé</label>
+        <form
+          id="filterForm"
+          th:action="@{/rooms/filter}"
+          method="get"
+          class="sort-options"
+        >
+          <strong>Trier par Prix :</strong>
+          <label
+            ><input
+              type="radio"
+              name="sortByPrix"
+              value="asc"
+              th:checked="${sortByPrix=='asc'}"
+              onchange="submitForm()"
+            />
+            Trier par le prix bas
+          </label>
+          <label
+            ><input
+              type="radio"
+              name="sortByPrix"
+              value="desc"
+              th:checked="${sortByPrix=='desc'}"
+              onchange="submitForm()"
+            />
+            Trier par le prix élevé</label
+          >
         </form>
 
         <!-- Tableau des chambres -->
-        <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(rooms)}">
-            <thead class="table-dark">
+        <table
+          class="table table-hover table-striped"
+          th:unless="${#lists.isEmpty(rooms)}"
+        >
+          <thead class="table-dark">
             <tr>
-                <th>N°</th>
-                <th>Nom</th>
-                <th>Type</th>
-                <th>Vue</th>
-                <th>Capacité</th>
-                <th>Prix par Nuit</th>
-                <th>Status</th>
-                <th>Image</th>
-                <th>Actions</th>
+              <th>N°</th>
+              <th>Nom</th>
+              <th>Type</th>
+              <th>Vue</th>
+              <th>Capacité</th>
+              <th>Prix par Nuit</th>
+              <th>Status</th>
+              <th>Image</th>
+              <th>Actions</th>
             </tr>
-            </thead>
-            <tbody>
-            <tr th:each="room, state : ${rooms}" th:class="${state.even} ? 'table-light' : ''">
-                <td th:text="${state.index + 1}"></td>
-                <td th:text="${room.Name}"></td>
-                <td th:text="${room.roomType}"></td>
-                <td th:text="${room.view}"></td>
-                <td th:text="${room.capacity}"></td>
-                <td th:text="${#numbers.formatCurrency(room.pricePerNight)}"></td>
-                <td th:text="${room.status}"></td>
-                <td>
-                    <img th:src="@{|/images/${room.images}|}"
-                         alt="Room Image"
-                         class="room-image img-fluid">
-                </td>
-                <td class="actions-cell">
-                    <div class="d-flex">
-                        <form th:action="@{/rooms/{roomId}/edit(roomId=${room.roomId})}" method="get" class="mr-2">
-                            <button type="submit" class="btn btn-success btn-sm btn-action">
-                                <i class="fas fa-edit"></i>Modifier
-                            </button>
-                        </form>
-                        <form th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}" method="post" th:method="delete">
-                            <button type="submit" class="btn btn-danger btn-sm btn-action"
-                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')">
-                                <i class="fas fa-trash"></i>Supprimer
-                            </button>
-                        </form>
-                    </div>
-                </td>
+          </thead>
+          <tbody>
+            <tr
+              th:each="room, state : ${rooms}"
+              th:class="${state.even} ? 'table-light' : ''"
+            >
+              <td th:text="${state.index + 1}"></td>
+              <td th:text="${room.Name}"></td>
+              <td th:text="${room.roomType}"></td>
+              <td th:text="${room.view}"></td>
+              <td th:text="${room.capacity}"></td>
+              <td th:text="${#numbers.formatCurrency(room.pricePerNight)}"></td>
+              <td th:text="${room.status}"></td>
+              <td>
+                <img
+                  th:src="@{|/images/${room.images}|}"
+                  alt="Room Image"
+                  class="room-image img-fluid"
+                />
+              </td>
+              <td class="actions-cell">
+                <div class="d-flex">
+                  <form
+                    th:action="@{/rooms/{roomId}/edit(roomId=${room.roomId})}"
+                    method="get"
+                    class="mr-2"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-success btn-sm btn-action"
+                    >
+                      <i class="fas fa-edit"></i>Modifier
+                    </button>
+                  </form>
+                  <form
+                    th:action="@{/rooms/{roomId}/delete(roomId=${room.roomId})}"
+                    method="post"
+                    th:method="delete"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-danger btn-sm btn-action"
+                      onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')"
+                    >
+                      <i class="fas fa-trash"></i>Supprimer
+                    </button>
+                  </form>
+                </div>
+              </td>
             </tr>
-            </tbody>
+          </tbody>
         </table>
 
         <!-- Message si aucune chambre n'est trouvée -->
         <div class="no-rooms-alert" th:if="${#lists.isEmpty(rooms)}">
-            <i class="fas fa-info-circle mr-3"></i>Aucune chambre trouvée dans la base de données.
+          <i class="fas fa-info-circle mr-3"></i>Aucune chambre trouvée dans la
+          base de données.
         </div>
-<nav aria-label="Page navigation" th:if="${not #lists.isEmpty(rooms)}">
-<ul class="pagination">
-<li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-<a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage-1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage-1}|}">
-    &laquo;
-</a>
-</li>
-<li th:each="index: ${#numbers.sequence(0,totalPages -1)}" class="page-item"    
-            th:classappend="${currentPage==index ?'active':''}">
-          <a class="page-link"th:href="${sortByPrix==null}?@{|/rooms?page=${index}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${index}|}" th:text="${index+1}"></a>
-        </li>
+        <nav aria-label="Page navigation" th:if="${not #lists.isEmpty(rooms)}">
+          <ul class="pagination">
+            <!-- Previous Page -->
+            <li
+              class="page-item"
+              th:classappend="${currentPage == 0 ? 'disabled' : ''}"
+            >
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix == null}"
+                th:href="@{/rooms(page=${currentPage - 1})}"
+                >&laquo;</a
+              >
 
- 
-        <li class="page-item"  th:classappend="${currentPage== totalPages -1?'disabled':''}">
-            <a class="page-link" th:href="${sortByPrix==null}?@{|/rooms?page=${currentPage+1}|}:@{|/rooms/filter?sortByPrix=${sortByPrix}&page=${currentPage+1}|}">&raquo;</a>
-          </li>
+              <a
+                class="page-link"
+                th:if="${roomName != null and sortByPrix == null}"
+                th:href="@{/rooms(page=${currentPage - 1}, roomName=${roomName})}"
+                >&laquo;</a
+              >
 
-</ul>
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix != null}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage - 1})}"
+                >&laquo;</a
+              >
+            </li>
 
+            <!-- Page Numbers -->
+            <li
+              th:each="index : ${#numbers.sequence(0, totalPages - 1)}"
+              class="page-item"
+              th:classappend="${currentPage == index ? 'active' : ''}"
+            >
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix == null}"
+                th:href="@{/rooms(page=${index})}"
+                th:text="${index + 1}"
+              >
+              </a>
 
-</nav>
-        
+              <a
+                class="page-link"
+                th:if="${roomName != null and sortByPrix == null}"
+                th:href="@{/rooms(page=${index}, roomName=${roomName})}"
+                th:text="${index + 1}"
+              >
+              </a>
+
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix != null}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${index})}"
+                th:text="${index + 1}"
+              >
+              </a>
+            </li>
+
+            <!-- Next Page -->
+            <li
+              class="page-item"
+              th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}"
+            >
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix == null}"
+                th:href="@{/rooms(page=${currentPage + 1})}"
+              >
+                &raquo;
+              </a>
+
+              <a
+                class="page-link"
+                th:if="${roomName != null and sortByPrix == null}"
+                th:href="@{/rooms(page=${currentPage + 1}, roomName=${roomName})}"
+              >
+                &raquo;
+              </a>
+
+              <a
+                class="page-link"
+                th:if="${roomName == null and sortByPrix != null}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage + 1})}"
+              >
+                &raquo;
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
-</div>
-</body>
+  </body>
 </html>

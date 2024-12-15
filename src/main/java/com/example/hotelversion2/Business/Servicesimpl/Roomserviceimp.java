@@ -109,8 +109,17 @@ public class Roomserviceimp implements RoomServices {
         );
         return (roomrep.findAll(sortedPageable));
     }
+    
     @Override
     public Page<Room> getAllRoomPagination(Pageable pageable) {
 
        return roomrep.findAll(pageable);
-    }}
+    }
+
+
+    public Page<Room> searchRoomsByName(String roomName, Pageable pageable) {
+        return roomrep.findByNameContainingIgnoreCase(roomName,pageable);
+    }
+    
+
+}
