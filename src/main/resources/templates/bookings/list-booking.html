@@ -7,19 +7,24 @@
     <link th:replace="layout/default-layout-admin::link">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript">
+        function submitForm() {
+          document.getElementById("filterForm").submit();
+        }
+    </script>
     <style>
         body {
             background-color: #f4f6f9;
         }
         .table td, .table th {
-            padding: 4px 8px; /* Further reduced internal padding */
-            line-height: 1.2; /* Compact line height */
+            padding: 4px 8px;
+            line-height: 1.2;
             vertical-align: middle;
-            font-size: 0.9rem; /* Slightly smaller font size */
+            font-size: 0.9rem;
         }
         
         .table {
-            margin-bottom: 0.5rem; /* Reduced margin below the table */
+            margin-bottom: 0.5rem;
         }
         
         .table th {
@@ -103,6 +108,21 @@
             margin-right: 10px;
         }
 
+        .sort-options {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .sort-options label {
+            margin-right: 10px;
+            margin-bottom: 0;
+        }
+
         /* Status Badge Styles */
         .badge-confirmed {
             background-color: #28a745;
@@ -150,6 +170,30 @@
             background-color: #5a6268;
             border-color: #5a6268;
         }
+
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: #d6d8db;
+            color: #6c757d;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #6c757d;
+        }
+
+        .pagination .page-link:hover {
+            color: #495057;
+        }
     </style>
 </head>
 <body th:replace="layout/default-layout-admin::body">
@@ -163,90 +207,199 @@
                 <i class="fas fa-plus-circle mr-2"></i>Nouvelle Réservation
             </a>
 
-           
-
             <form th:action="@{/bookings}" method="get" class="search-filter">
                 <input type="text" 
-                       name="clientName" 
+                       name="checkInDate" 
                        class="form-control" 
-                       placeholder="Rechercher par nom de client" 
+                       placeholder="Rechercher par la date d'arrivée" 
                        style="width: 250px;"
-                       th:value="${param.clientName}">
+                       th:value="${checkInDate}">
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </form>
         </div>
 
-        <!-- Tableau des réservations -->
-       <div  class="table-responsive mt-4">
+        <!-- Options de tri -->
+        <form
+            id="filterForm"
+            th:action="@{/bookings/filter}"
+            method="get"
+            class="sort-options"
+        >
+            <strong>Trier par Date :</strong>
+            <label>
+                <input
+                    type="radio"
+                    name="sortBycheckInDate"
+                    value="asc"
+                    th:checked="${sortBycheckInDate=='asc'}"
+                    onchange="submitForm()"
+                />
+                Asc
+            </label>
+            <label>
+                <input
+                    type="radio"
+                    name="sortBycheckInDate"
+                    value="desc"
+                    th:checked="${sortBycheckInDate=='desc'}"
+                    onchange="submitForm()"
+                />
+                Desc
+            </label>
+        </form>
 
-        <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(bookings)}">
-            <thead class="table-dark">
-            <tr>
-                <th>N° Réservation</th>
-                <th>Client</th>
-                <th>Chambre</th>
-                <th>Dates</th>
-                <th>Nombre de Personnes</th>
-                <th>Statut Réservation</th>
-                <th>Statut Paiement</th>
-                <th>Montant Total</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="booking, state : ${bookings}" th:class="${state.even} ? 'table-light' : ''">
-                <td th:text="${booking.booking_id}"></td>
-                <td>
-                    <strong th:text="${booking.customer.lastName + ' ' + booking.customer.name}"></strong>
-                </td>
-                <td th:text="${booking.room.Name}"></td>
-                <td>
-                    <span th:text="${#temporals.format(booking.checkInDate, 'dd/MM/yyyy')} + 
-                                     ' - ' + 
-                                     ${#temporals.format(booking.checkOutDate, 'dd/MM/yyyy')}"></span>
-                </td>
-                <td th:text="${booking.nombrePersonnes}"></td>
-                <td>
-                    <span class="badge stat-badge" 
-                          th:classappend="${booking.bookingStatus == 'CONFIRMED' ? 'badge-confirmed' : 
-                                           booking.bookingStatus == 'PENDING' ? 'badge-pending' : 
-                                           'badge-cancelled'}"
-                          th:text="${booking.bookingStatus}"></span>
-                </td>
-                <td>
-                    <span class="badge stat-badge" 
-                          th:classappend="${booking.paymentStatus == 'PAID' ? 'badge-payment-paid' : 
-                                           booking.paymentStatus == 'PENDING' ? 'badge-payment-pending' : 
-                                           'badge-payment-cancelled'}"
-                          th:text="${booking.paymentStatus}"></span>
-                </td>
-                <td th:text="${#numbers.formatCurrency(booking.totalAmount)}"></td>
-                <td class="actions-cell">
-                    <div class="d-flex">
-                        <form th:action="@{/bookings/{bookingId}/edit(bookingId=${booking.booking_id})}" method="get" class="mr-2">
-                            <button type="submit" class="btn btn-success btn-sm btn-action">
-                                <i class="fas fa-edit"></i>Modifier
-                            </button>
-                        </form>
-                        <form th:action="@{/bookings/{bookingId}/delete(bookingId=${booking.booking_id})}" method="post" th:method="delete">
-                            <button type="submit" class="btn btn-danger btn-sm btn-action" 
-                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')">
-                                <i class="fas fa-trash"></i>Supprimer
-                            </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-       </div>
+        <!-- Tableau des réservations -->
+        <div class="table-responsive mt-4">
+            <table class="table table-hover table-striped" th:unless="${#lists.isEmpty(bookings)}">
+                <thead class="table-dark">
+                <tr>
+                    <th>N° Réservation</th>
+                    <th>Client</th>
+                    <th>Chambre</th>
+                    <th>Dates</th>
+                    <th>Nombre de Personnes</th>
+                    <th>Statut Réservation</th>
+                    <th>Statut Paiement</th>
+                    <th>Montant Total</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="booking, state : ${bookings}" th:class="${state.even} ? 'table-light' : ''">
+                    <td th:text="${booking.booking_id}"></td>
+                    <td>
+                        <strong th:text="${booking.customer.lastName + ' ' + booking.customer.name}"></strong>
+                    </td>
+                    <td th:text="${booking.room.Name}"></td>
+                    <td>
+                        <span th:text="${#temporals.format(booking.checkInDate, 'dd/MM/yyyy')} + 
+                                         ' - ' + 
+                                         ${#temporals.format(booking.checkOutDate, 'dd/MM/yyyy')}"></span>
+                    </td>
+                    <td th:text="${booking.nombrePersonnes}"></td>
+                    <td>
+                        <span class="badge stat-badge" 
+                              th:classappend="${booking.bookingStatus == 'CONFIRMED' ? 'badge-confirmed' : 
+                                               booking.bookingStatus == 'PENDING' ? 'badge-pending' : 
+                                               'badge-cancelled'}"
+                              th:text="${booking.bookingStatus}"></span>
+                    </td>
+                    <td>
+                        <span class="badge stat-badge" 
+                              th:classappend="${booking.paymentStatus == 'PAID' ? 'badge-payment-paid' : 
+                                               booking.paymentStatus == 'PENDING' ? 'badge-payment-pending' : 
+                                               'badge-payment-cancelled'}"
+                              th:text="${booking.paymentStatus}"></span>
+                    </td>
+                    <td th:text="${#numbers.formatCurrency(booking.totalAmount)}"></td>
+                    <td class="actions-cell">
+                        <div class="d-flex">
+                            <form th:action="@{/bookings/{bookingId}/edit(bookingId=${booking.booking_id})}" method="get" class="mr-2">
+                                <button type="submit" class="btn btn-success btn-sm btn-action">
+                                    <i class="fas fa-edit"></i>Modifier
+                                </button>
+                            </form>
+                            <form th:action="@{/bookings/{bookingId}/delete(bookingId=${booking.booking_id})}" method="post" th:method="delete">
+                                <button type="submit" class="btn btn-danger btn-sm btn-action" 
+                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réservation ?')">
+                                    <i class="fas fa-trash"></i>Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- Message si aucune réservation n'est trouvée -->
         <div class="no-bookings-alert" th:if="${#lists.isEmpty(bookings)}">
             <i class="fas fa-info-circle mr-3"></i>Aucune réservation trouvée dans la base de données.
         </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" th:if="${not #lists.isEmpty(bookings)}">
+            <ul class="pagination">
+                <!-- Previous Page -->
+                <li
+                    class="page-item"
+                    th:classappend="${currentPage == 0 ? 'disabled' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${currentPage - 1})}"
+                    >&laquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate != null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${currentPage - 1}, checkInDate=${checkInDate})}"
+                    >&laquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate != null}"
+                        th:href="@{/bookings/filter(sortBycheckInDate=${sortBycheckInDate}, page=${currentPage - 1})}"
+                    >&laquo;</a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li
+                    th:each="index : ${#numbers.sequence(0, totalPages - 1)}"
+                    class="page-item"
+                    th:classappend="${currentPage == index ? 'active' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${index})}"
+                        th:text="${index + 1}"
+                    ></a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate != null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${index}, checkInDate=${checkInDate})}"
+                        th:text="${index + 1}"
+                    ></a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate != null}"
+                        th:href="@{/bookings/filter(sortBycheckInDate=${sortBycheckInDate}, page=${index})}"
+                        th:text="${index + 1}"
+                    ></a>
+                </li>
+
+                <!-- Next Page -->
+                <li
+                    class="page-item"
+                    th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}"
+                >
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${currentPage + 1})}"
+                    >&raquo;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate != null and sortBycheckInDate == null}"
+                        th:href="@{/bookings(page=${currentPage + 1}, checkInDate=${checkInDate})}"
+                    >&raqua;</a>
+
+                    <a
+                        class="page-link"
+                        th:if="${checkInDate == null and sortBycheckInDate != null}"
+                        th:href="@{/bookings/filter(sortBycheckInDate=${sortBycheckInDate}, page=${currentPage + 1})}"
+                    >&raquo;</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+</div>
 </body>
 </html>

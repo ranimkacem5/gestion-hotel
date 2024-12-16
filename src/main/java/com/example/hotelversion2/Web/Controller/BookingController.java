@@ -1,12 +1,17 @@
 package com.example.hotelversion2.Web.Controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.example.hotelversion2.Business.Services.BookingService;
 import com.example.hotelversion2.Business.Services.Customerservice;
 import com.example.hotelversion2.Business.Services.RoomServices;
@@ -17,6 +22,9 @@ import com.example.hotelversion2.Web.Models.BookingForm;
 import com.example.hotelversion2.Web.Models.Bookingstatus;
 import com.example.hotelversion2.Web.Models.Paymentstatus;
 import jakarta.validation.Valid;
+
+import java.time.LocalDate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @Controller
@@ -35,11 +43,53 @@ public class BookingController {
     this.customerservice=customerservice;
     this.roomServices=roomServices;
   }
+
+
+  
+    @GetMapping("")
+    public String getallBooking(@RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "3") int pageSize,
+    @RequestParam(required = false) LocalDate checkInDate,
+    Model model) {
+
+      Page<Booking> pagebooking;
+      if(checkInDate !=null)
+      {
+        pagebooking=bookingservice.rechercherbycheckInDate(checkInDate,PageRequest.of(page, pageSize));
+      }
+      else 
+      {
+        pagebooking=  bookingservice.getAllBookingPagination(PageRequest.of(page, pageSize));
+      }
+      model.addAttribute("bookings", pagebooking.getContent());
+      model.addAttribute("pageSize", pageSize);
+      model.addAttribute("currentPage", page);
+      model.addAttribute("totalPages", pagebooking.getTotalPages());
+      model.addAttribute("checkInDate", checkInDate);
+        return  "bookings/list-booking";
+    }
+    /* 
   @RequestMapping(path="", method=RequestMethod.GET)
   public String ListBooking(Model model) {
     model.addAttribute("bookings",bookingservice.getAllBookings() );
       return "bookings/list-booking";
-  } 
+  }  */
+
+  @RequestMapping(path="/filter", method=RequestMethod.GET)
+    public String getCustomerSorted(@RequestParam(required = false, defaultValue = "asc") String  sortBycheckInDate,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "3") int pageSize,Model model) {
+        Page<Booking> bookingPage =bookingservice.getBookingSortedBycheckInDatePagination(sortBycheckInDate, PageRequest.of(page, pageSize));
+
+        model.addAttribute("bookings", bookingPage.getContent());
+        model.addAttribute("sortBycheckInDate", sortBycheckInDate);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", bookingPage.getTotalPages());
+
+        return "bookings/list-booking";
+    }
+    
 
   @RequestMapping(path="/create", method=RequestMethod.GET)
   public String showaddbookingForm(Model model) {

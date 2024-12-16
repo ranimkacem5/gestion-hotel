@@ -36,10 +36,10 @@ public class Booking {
     @JoinColumn(name = "customer_id",  nullable = false)    
     private Customer customer;
 
-    @Column(name = "check_in_date", nullable = false)  // Correction : nom de colonne correct
+    @Column(name = "checkInDate", nullable = false)  // Correction : nom de colonne correct
     private LocalDate checkInDate;  // Correction : camelCase
 
-    @Column(name = "check_out_date", nullable = false)
+    @Column(name = "checkOutDate", nullable = false)
     private LocalDate checkOutDate;  // Correction : camelCase
 
     @Column(name = "payment_status", nullable = false)   
