@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>À propos - Gestion Hôtelière</title>
+    <link th:replace="~{layout/default-layout::link}">
+    <link th:replace="~{layout/default-layout::link}">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
@@ -20,7 +22,7 @@
         }
         .feature-icon {
             font-size: 3rem;
-            color: #6c757d;
+            color: #007bff;
             margin-bottom: 15px;
         }
         .feature-card {
@@ -34,25 +36,18 @@
         .feature-card:hover {
             transform: scale(1.05);
         }
-        .team-member {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
         .section-title {
-            color: #495057;
-            border-bottom: 3px solid #6c757d;
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
             padding-bottom: 10px;
             margin-bottom: 30px;
         }
         .back-button {
             margin-bottom: 20px;
+        }
+        .admin-badge {
+            background-color: #28a745;
+            color: white;
         }
     </style>
 </head>
