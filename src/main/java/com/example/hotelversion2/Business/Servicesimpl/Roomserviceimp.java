@@ -120,6 +120,31 @@ public class Roomserviceimp implements RoomServices {
     public Page<Room> searchRoomsByName(String roomName, Pageable pageable) {
         return roomrep.findByNameContainingIgnoreCase(roomName,pageable);
     }
-    
+    @Override
+public Page<Room> filterRoomsByTypeAndView(RoomType roomType, String view, String sortByPrix, Pageable pageable) {
+    if ("asc".equals(sortByPrix)) {
+        return roomrep.findByRoomTypeAndViewOrderByPricePerNightAsc(roomType, view, pageable);
+    } else {
+        return roomrep.findByRoomTypeAndViewOrderByPricePerNightDesc(roomType, view, pageable);
+    }
+}
+
+@Override
+public Page<Room> filterRoomsByType(RoomType roomType, String sortByPrix, Pageable pageable) {
+    if ("asc".equals(sortByPrix)) {
+        return roomrep.findByRoomTypeOrderByPricePerNightAsc(roomType, pageable);
+    } else {
+        return roomrep.findByRoomTypeOrderByPricePerNightDesc(roomType, pageable);
+    }
+}
+
+@Override
+public Page<Room> filterRoomsByView(String view, String sortByPrix, Pageable pageable) {
+    if ("asc".equals(sortByPrix)) {
+        return roomrep.findByViewOrderByPricePerNightAsc(view, pageable);
+    } else {
+        return roomrep.findByViewOrderByPricePerNightDesc(view, pageable);
+    }
+}
 
 }

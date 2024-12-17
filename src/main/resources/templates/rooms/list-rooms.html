@@ -17,7 +17,18 @@
     />
     <script type="text/javascript">
       function submitForm() {
-        document.getElementById("filterForm").submit();
+        const roomTypeSelect = document.getElementById('roomType');
+        const roomTypeValue = roomTypeSelect.value;
+      
+        // Add roomTypeValue to the form data here (e.g., using hidden input)
+        const filterForm = document.getElementById('filterForm');
+        const hiddenRoomTypeInput = document.createElement('input');
+        hiddenRoomTypeInput.type = 'hidden';
+        hiddenRoomTypeInput.name = 'roomType';
+        hiddenRoomTypeInput.value = roomTypeValue;
+        filterForm.appendChild(hiddenRoomTypeInput);
+      
+        filterForm.submit();
       }
     </script>
     <style>
@@ -247,33 +258,59 @@
 
         <!-- Options de tri -->
         <form
-          id="filterForm"
-          th:action="@{/rooms/filter}"
-          method="get"
-          class="sort-options"
-        >
-          <strong>Trier par Prix :</strong>
-          <label
-            ><input
-              type="radio"
-              name="sortByPrix"
-              value="asc"
-              th:checked="${sortByPrix=='asc'}"
-              onchange="submitForm()"
-            />
-            Trier par le prix bas
-          </label>
-          <label
-            ><input
-              type="radio"
-              name="sortByPrix"
-              value="desc"
-              th:checked="${sortByPrix=='desc'}"
-              onchange="submitForm()"
-            />
-            Trier par le prix élevé</label
-          >
-        </form>
+        id="filterForm"
+        th:action="@{/rooms/filter(roomType=${roomType})}" 
+        method="get"
+        class="sort-options"
+      >
+        <div class="row">
+          <div class="col-md-4">
+            <strong>Type de Chambre :</strong>
+            <select id ="roomType" name="roomType" class="form-control" onchange="submitForm()">
+              <option value="" >Tous les types</option>
+              <option value="Double" th:selected="${roomType == 'Double'}">Double</option>
+              <option value="Single" th:selected="${roomType == 'Single'}">Single</option>
+              <option value="SUITE" th:selected="${roomType == 'SUITE'}">Suite</option>
+            </select>
+          </div>
+          
+          <div class="col-md-4">
+            <strong>Vue :</strong>
+            <select name="view" class="form-control" onchange="submitForm()">
+              <option value="">Toutes les vues</option>
+              <option value="Mer" th:selected="${view == 'Mer'}">Mer</option>
+              <option value="Jardin" th:selected="${view == 'Jardin'}">Jardin</option>
+              <option value="Ville" th:selected="${view == 'Ville'}">Ville</option>
+            </select>
+          </div>
+          
+          <div class="col-md-4">
+            <strong>Trier par Prix :</strong>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  name="sortByPrix"
+                  value="asc"
+                  th:checked="${sortByPrix=='asc'}"
+                  onchange="submitForm()"
+                />
+                Prix bas
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="sortByPrix"
+                  value="desc"
+                  th:checked="${sortByPrix=='desc'}"
+                  onchange="submitForm()"
+                />
+                Prix élevé
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
 
         <!-- Tableau des chambres -->
         <table
@@ -374,7 +411,8 @@
               <a
                 class="page-link"
                 th:if="${roomName == null and sortByPrix != null}"
-                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage - 1})}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage - 1}, roomType=${roomType}, 
+         view=${view}, )}"
                 >&laquo;</a
               >
             </li>
@@ -404,7 +442,8 @@
               <a
                 class="page-link"
                 th:if="${roomName == null and sortByPrix != null}"
-                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${index})}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${index} ,roomType=${roomType}, 
+         view=${view}, )}"
                 th:text="${index + 1}"
               >
               </a>
@@ -434,7 +473,8 @@
               <a
                 class="page-link"
                 th:if="${roomName == null and sortByPrix != null}"
-                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage + 1})}"
+                th:href="@{/rooms/filter(sortByPrix=${sortByPrix}, page=${currentPage + 1}, roomType=${roomType}, 
+         view=${view}, )}"
               >
                 &raquo;
               </a>

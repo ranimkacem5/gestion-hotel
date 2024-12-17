@@ -17,7 +17,17 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByPricePerNightLessThan(double pricePerNight);  
     List<Room> findByCapacity(int capacity);  
     List<Room> findByView(String view);
-    Page<Room> findByNameContainingIgnoreCase(String name, Pageable pageable);
   
+    Page<Room> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+    Page<Room> findByRoomTypeAndViewOrderByPricePerNightAsc(RoomType roomType, String view, Pageable pageable);
+    Page<Room> findByRoomTypeAndViewOrderByPricePerNightDesc(RoomType roomType, String view, Pageable pageable);
+    Page<Room> findByRoomTypeOrderByPricePerNightAsc(RoomType roomType, Pageable pageable);
+    Page<Room> findByRoomTypeOrderByPricePerNightDesc(RoomType roomType, Pageable pageable);
+    Page<Room> findByViewOrderByPricePerNightAsc(String view, Pageable pageable);
+    Page<Room> findByViewOrderByPricePerNightDesc(String view, Pageable pageable);
+
+
+
    
 }

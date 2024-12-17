@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - Gestion Hôtelière</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .about-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-top: 30px;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .feature-card {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: scale(1.05);
+        }
+        .team-member {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .section-title {
+            color: #495057;
+            border-bottom: 3px solid #6c757d;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .back-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body  th:replace="layout/default-layout::body">
+    <div th:fragment="content"  class="container  mt-5">
+        <div class="about-section">
+            <h1 class="text-center section-title mb-4">
+                <i class="fas fa-hotel mr-3"></i>Système de Gestion Hôtelière
+            </h1>
+            <div class="back-button">
+                <a href="javascript:history.back()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i>Retour
+                </a>
+            </div>
+            <section class="mb-5">
+                <h2 class="text-center mb-4">Notre Mission</h2>
+                <p class="text-center lead">
+                    Simplifier la gestion hôtelière grâce à une solution technologique moderne, 
+                    intuitive et efficace qui répond aux besoins des gestionnaires et des clients.
+                </p>
+            </section>
+
+            <section class="mb-5">
+                <h2 class="text-center mb-4">Fonctionnalités Principales</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-bed feature-icon"></i>
+                            <h3>Gestion des Chambres</h3>
+                            <p>
+                                Gérez facilement l'inventaire de vos chambres, 
+                                suivez leur disponibilité et leurs caractéristiques.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-calendar-check feature-icon"></i>
+                            <h3>Réservations</h3>
+                            <p>
+                                Système de réservation complet avec suivi 
+                                des dates, des clients et des paiements.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="fas fa-users feature-icon"></i>
+                            <h3>Gestion des Clients</h3>
+                            <p>
+                                Centralisation des informations clients, 
+                                historique des réservations et préférences.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-center mb-4">Technologies Utilisées</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Spring Boot
+                                <span class="badge badge-primary badge-pill">Backend</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Thymeleaf
+                                <span class="badge badge-primary badge-pill">Template Engine</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Spring Data JPA
+                                <span class="badge badge-primary badge-pill">Persistence</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Bootstrap
+                                <span class="badge badge-primary badge-pill">Frontend</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

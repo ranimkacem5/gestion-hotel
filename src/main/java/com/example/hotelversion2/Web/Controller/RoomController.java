@@ -26,6 +26,7 @@ import com.example.hotelversion2.Business.Services.BookingService;
 import com.example.hotelversion2.Business.Services.RoomServices;
 import com.example.hotelversion2.DAO.entites.Room;
 import com.example.hotelversion2.Web.Models.RoomForm;
+import com.example.hotelversion2.Web.Models.RoomType;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.slf4j.Logger;
@@ -70,18 +71,13 @@ public class RoomController {
         return "list"; // Vue Thymeleaf pour afficher les chambres
     }*/
 
-    @GetMapping("client/rooms")
-
-    public String afficherChambres(Model model) {
-        model.addAttribute("rooms", this.rommservice.getAllRooms());
-        
-       
-        return "liste-room-client";
-    }
-@GetMapping("/")
+   
+/*@GetMapping("/")
 public String ShowpageHome() {
+ 
     return ("homepage");
-}/* 
+}*/
+/* 
     @GetMapping("/rooms")
     public String getAllRooms(@RequestParam (defaultValue="0") int page,
      @RequestParam (defaultValue="3")int pagesize ,
@@ -135,7 +131,7 @@ public String getAllRooms(
     return "rooms/list-rooms";
 }
 
-    @RequestMapping("/rooms/filter")
+    /*@RequestMapping("/rooms/filter")
     public String getPersonSorted(@RequestParam(required = false, defaultValue = "asc") String sortByPrix,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int pageSize,
@@ -148,7 +144,83 @@ public String getAllRooms(
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", RoomPage.getTotalPages());
         return "rooms/list-rooms";
+    }*/
+    @RequestMapping("/rooms/filter")
+    public String filterRooms(
+            @RequestParam(required = false) RoomType roomType,
+            @RequestParam(required = false) String view,
+            @RequestParam(required = false, defaultValue = "asc") String sortByPrix,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int pageSize,
+            Model model) {
+        
+        Page<Room> RoomPage;
+    
+        // Vérification si aucun filtre n'est sélectionné
+        if ((roomType == null || roomType.toString().isEmpty()) && 
+            (view == null || view.isEmpty())) {
+            // Retourne à la liste initiale sans filtre
+            RoomPage = this.rommservice.getAllRoomPagination(PageRequest.of(page, pageSize));
+        } 
+        // Filtrer selon le type de chambre et la vue
+        else if (roomType != null && view != null && !view.isEmpty()) {
+            RoomPage = this.rommservice.filterRoomsByTypeAndView(roomType, view, sortByPrix, PageRequest.of(page, pageSize));
+        } 
+        else if (roomType != null && (view == null || view.isEmpty())) {
+            RoomPage = this.rommservice.filterRoomsByType(roomType, sortByPrix, PageRequest.of(page, pageSize));
+        } 
+        else if ((roomType == null || roomType.toString().isEmpty()) && view != null && !view.isEmpty()) {
+            RoomPage = this.rommservice.filterRoomsByView(view, sortByPrix, PageRequest.of(page, pageSize));
+        } 
+        else {
+            // Utiliser le tri par prix si rien d'autre n'est spécifié
+            RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
+        }
+    
+        model.addAttribute("rooms", RoomPage.getContent());
+        model.addAttribute("sortByPrix", sortByPrix);
+        model.addAttribute("roomType", roomType);
+        model.addAttribute("view", view);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", RoomPage.getTotalPages());
+        
+        return "rooms/list-rooms";
     }
+    /*@RequestMapping("/rooms/filter")
+public String filterRooms(
+        @RequestParam(required = false) RoomType roomType,
+        @RequestParam(required = false) String view,
+        @RequestParam(required = false, defaultValue = "asc") String sortByPrix,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "3") int pageSize,
+        Model model) {
+    
+    Page<Room> RoomPage;
+
+    // Filtrer selon le type de chambre et la vue
+    if (roomType != null  && view != null && !view.isEmpty()) {
+        RoomPage = this.rommservice.filterRoomsByTypeAndView(roomType, view, sortByPrix, PageRequest.of(page, pageSize));
+    } else if (roomType != null&& view == null && view.isEmpty() ) {
+        RoomPage = this.rommservice.filterRoomsByType(roomType, sortByPrix, PageRequest.of(page, pageSize));
+    } else if (roomType==null && view != null && !view.isEmpty()) {
+        RoomPage = this.rommservice.filterRoomsByView(view, sortByPrix, PageRequest.of(page, pageSize));
+}
+     else {
+        // Si aucun filtre n'est appliqué, utiliser le tri par prix
+        RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
+    }
+
+    model.addAttribute("rooms", RoomPage.getContent());
+    model.addAttribute("sortByPrix", sortByPrix);
+    model.addAttribute("roomType", roomType);
+    model.addAttribute("view", view);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", RoomPage.getTotalPages());
+    
+    return "rooms/list-rooms";
+}*/
 
     // methode get qui va afficher le formulaire d'ajout
     @RequestMapping("/rooms/create")

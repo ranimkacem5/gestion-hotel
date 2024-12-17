@@ -10,8 +10,7 @@ import com.example.hotelversion2.DAO.entites.Room;
 import com.example.hotelversion2.Web.Models.RoomType;
 @Service
 public interface RoomServices {
-    // Read opérations
-    List<Room> getAllRooms();
+List<Room> getAllRooms();
     Room getRoomById(Long id);
     List<Room> getRoomByView(String view);
 List<Room> getRoombyRoomType(RoomType roomType);
@@ -20,13 +19,11 @@ List<Room> getRoomByPricePerNightLessThan(double pricePerNight );
 List<Room> getRoomSortedByPrice(String order);
 Page<Room> getRoomSortedByPricePagination(String order,Pageable pageable);
 Page<Room>getAllRoomPagination(Pageable pageable);
-    // Create
-    Room addRoom(Room room);
-
-    // Update
-    Room updateRoom(Room room);
-
-    // Delete
-    void deleteRoom(Room room);
-   Page<Room> searchRoomsByName(String roomName, Pageable pageable);
+ Room addRoom(Room room);
+Room updateRoom(Room room);
+void deleteRoom(Room room);
+Page<Room> searchRoomsByName(String roomName, Pageable pageable);
+Page<Room> filterRoomsByTypeAndView(RoomType roomType, String view, String sortByPrix, Pageable pageable);
+Page<Room> filterRoomsByType(RoomType roomType, String sortByPrix, Pageable pageable);
+Page<Room> filterRoomsByView(String view, String sortByPrix, Pageable pageable);
 }

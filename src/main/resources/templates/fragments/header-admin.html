@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active text-light" th:href="@{/}">
+                        <a class="nav-link active text-light" th:href="@{/admin}">
                             <i class="bi bi-house-door"></i> Home
                         </a>
                     </li>
@@ -46,16 +46,20 @@
                     </li>
                     
                 </ul>
-
+                <ul class="navbar-nav ms-auto me-4" sec:authorize="isAuthenticated()">
+                    <!-- <ul class="navbar-nav ms-auto me-4"> -->
+                      <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" class="row">
+                          <div class="col">
+                            <span class="text-secondary" sec:authentication="name"></span>
+                            <span class="text-secondary" sec:authentication="principal.authorities">ROLE</span>
+                          </div>
+                          <input class="btn btn-danger col" type="submit" value="Logout" />
+                        </form>
+                      </li>
+                    </ul>
                 <!-- Right Links -->
-                <ul class="navbar-nav ms-auto">
-                    
-                    <li class="nav-item">
-                        <a class="nav-link text-light" th:href="@{/login}">
-                            <i class="bi bi-box-arrow-in-right"></i> S'identifier
-                        </a>
-                    </li>
-                </ul>
+                
             </div>
         </div>
     </nav>

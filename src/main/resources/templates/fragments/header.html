@@ -30,12 +30,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" th:href="@{/booking}">
+                        <a class="nav-link text-light" th:href="@{/clientpage}">
                             <i class="bi bi-calendar-check"></i> Booking
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" th:href="@{/contact}">
+                        <a class="nav-link text-light" th:href="@{/pagehome/contact}">
                             <i class="bi bi-tags"></i> Contact
                         </a>
                     </li>
@@ -47,14 +47,13 @@
                 </ul>
 
                 <!-- Right Links -->
-                <ul class="navbar-nav ms-auto">
-                    
+                <ul class="navbar-nav ms-auto me-4" sec:authorize="!isAuthenticated()" >
                     <li class="nav-item">
-                        <a class="nav-link text-light" th:href="@{/login}">
-                            <i class="bi bi-box-arrow-in-right"></i> S'identifier
-                        </a>
+                      <form th:action="@{/login}" method="get" class="row">   
+                        <input class="btn btn-success col" type="submit" value="Login" />
+                      </form>
                     </li>
-                </ul>
+                  </ul>
             </div>
         </div>
     </nav>
