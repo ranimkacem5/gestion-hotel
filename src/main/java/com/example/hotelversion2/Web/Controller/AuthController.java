@@ -29,9 +29,6 @@ public class AuthController{
         return "errors";
     }
     
-    @GetMapping(path="/admin")
-    public String getAdminHomepage() {
-        return"admin_homepage";
-    }
+   
     
 }

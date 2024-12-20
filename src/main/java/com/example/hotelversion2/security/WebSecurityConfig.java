@@ -21,7 +21,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/clientpage","/pagehome/contact","/about","/booking", "/webjars/**",
-                                "/images/**","/login","/css/**")
+                                "/images/**","/login","/css/**","/client/filter")
                         .permitAll()
                         .anyRequest().authenticated() // Tous les endpoints nécessitent une
                                                       // authentification
@@ -45,7 +45,9 @@ public class WebSecurityConfig {
                                                             // sauvegardée n'existe
                         }
                 }) )  
-                 .logout((logout) -> logout.permitAll());
+                 .logout((logout) -> logout.permitAll()
+                 .logoutSuccessUrl("/") );// Redirige vers la page d'accueil après le logout
+                // Optionnel : supprime le cookie de session)
 
         return http.build();
     }

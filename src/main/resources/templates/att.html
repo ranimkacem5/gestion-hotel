@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Liste des chambres disponibles dans notre établissement">
+    <title>Nos Chambres | Réservation</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .room-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .room-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+        .room-image {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.5s ease;
+        }
+        .room-card:hover .room-image {
+            transform: scale(1.05);
+        }
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="text-center mb-5">
+            <i class="fas fa-hotel me-2"></i>Nos Chambres
+        </h1>
+
+        <!-- Barre de recherche et filtres -->
+        <div class="row">
+            <div class="col-12">
+                <div class="filter-section">
+                    <form id="roomFilterForm" th:action="@{/client/filter}" method="get">
+                        <div class="row g-3">
+                            <!-- Recherche par nom -->
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" name="roomName" class="form-control" 
+                                           placeholder="Rechercher une chambre" 
+                                           th:value="${roomName}">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Type de chambre -->
+                            <div class="col-md-2">
+                                <select name="roomType" class="form-select" aria-label="Type de chambre">
+                                    <option value="">Tous types</option>
+                                    <option value="Single" th:selected="${roomType == 'Single'}">Single</option>
+                                    <option value="Double" th:selected="${roomType == 'Double'}">Double</option>
+                                    <option value="Suite" th:selected="${roomType == 'Suite'}">Suite</option>
+                                </select>
+                            </div>
+
+                            <!-- Vue -->
+                            <div class="col-md-2">
+                                <select name="view" class="form-select" aria-label="Type de vue">
+                                    <option value="">Toutes vues</option>
+                                    <option value="Mer" th:selected="${view == 'Mer'}">Mer</option>
+                                    <option value="Jardin" th:selected="${view == 'Jardin'}">Jardin</option>
+                                    <option value="Ville" th:selected="${view == 'Ville'}">Ville</option>
+                                </select>
+                            </div>
+
+                            <!-- Tri par prix -->
+                            <div class="col-md-2">
+                                <select name="sortByPrix" class="form-select" aria-label="Trier par prix">
+                                    <option value="asc" th:selected="${sortByPrix == 'asc'}">Prix croissant</option>
+                                    <option value="desc" th:selected="${sortByPrix == 'desc'}">Prix décroissant</option>
+                                </select>
+                            </div>
+
+                            <!-- Bouton de réinitialisation -->
+                            <div class="col-md-2">
+                                <a href="/clientpage" class="btn btn-outline-secondary w-100">
+                                    <i class="fas fa-sync"></i> Réinitialiser
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des chambres -->
+        <div class="row" th:if="${not #lists.isEmpty(rooms)}">
+            <div class="col-12" th:each="room : ${rooms}">
+                <div class="card room-card mb-3">
+                    <div class="row g-0">
+                        <!-- Image -->
+                        <div class="col-md-4 position-relative">
+                            <img th:src="@{'/images/' + ${room.images}}" 
+                                 class="room-image" 
+                                 alt="Chambre" 
+                                 loading="lazy">
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <button class="btn btn-light btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#roomImageModal"
+                                        th:attr="data-bs-image-src=@{'/images/' + ${room.images}}">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Détails de la chambre -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    Chambre n°[[${room.roomId}]] - [[${room.roomType}]]
+                                </h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                <i class="fas fa-users me-2"></i>Capacité : [[${room.capacity}]] personnes
+                                            </small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-success">
+                                                <i class="fas fa-euro-sign me-2"></i>[[${room.pricePerNight}]] € / nuit
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Équipements :</h6>
+                                        <p class="card-text text-muted small">
+                                            [[${room.equipments}]]
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-calendar-check me-2"></i>Réserver
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message si aucune chambre -->
+        <div th:if="${#lists.isEmpty(rooms)}" class="alert alert-info text-center" role="alert">
+            <i class="fas fa-info-circle me-2"></i>Aucune chambre ne correspond à vos critères.
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" th:if="${not #lists.isEmpty(rooms)}">
+            <ul class="pagination">
+              <!-- Previous Page -->
+              <li
+                class="page-item"
+                th:classappend="${currentPage == 0 ? 'disabled' : ''}"
+              >
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix == null}"
+                  th:href="@{/client(page=${currentPage - 1})}"
+                  >&laquo;</a
+                >
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName != null and sortByPrix == null}"
+                  th:href="@{/client(page=${currentPage - 1}, roomName=${roomName})}"
+                  >&laquo;</a
+                >
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix != null}"
+                  th:href="@{/client/filter(sortByPrix=${sortByPrix}, page=${currentPage - 1}, roomType=${roomType}, 
+           view=${view}, )}"
+                  >&laquo;</a
+                >
+              </li>
+  
+              <!-- Page Numbers -->
+              <li
+                th:each="index : ${#numbers.sequence(0, totalPages - 1)}"
+                class="page-item"
+                th:classappend="${currentPage == index ? 'active' : ''}"
+              >
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix == null}"
+                  th:href="@{/clientpage(page=${index})}"
+                  th:text="${index + 1}"
+                >
+                </a>
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName != null and sortByPrix == null}"
+                  th:href="@{/clientpage(page=${index}, roomName=${roomName})}"
+                  th:text="${index + 1}"
+                >
+                </a>
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix != null}"
+                  th:href="@{/client/filter(sortByPrix=${sortByPrix}, page=${index} ,roomType=${roomType}, 
+           view=${view}, )}"
+                  th:text="${index + 1}"
+                >
+                </a>
+              </li>
+  
+              <!-- Next Page -->
+              <li
+                class="page-item"
+                th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}"
+              >
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix == null}"
+                  th:href="@{/clientpage(page=${currentPage + 1})}"
+                >
+                  &raquo;
+                </a>
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName != null and sortByPrix == null}"
+                  th:href="@{/clientpage(page=${currentPage + 1}, roomName=${roomName})}"
+                >
+                  &raquo;
+                </a>
+  
+                <a
+                  class="page-link"
+                  th:if="${roomName == null and sortByPrix != null}"
+                  th:href="@{/client/filter(sortByPrix=${sortByPrix}, page=${currentPage + 1}, roomType=${roomType}, 
+           view=${view}, )}"
+                >
+                  &raquo;
+                </a>
+              </li>
+            </ul>
+          </nav>
+    </div>
+
+    <!-- Modal pour image agrandie -->
+    <div class="modal fade" id="roomImageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Détails de la chambre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalRoomImage" src="" alt="Image de la chambre" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion du modal d'image
+            const imageButtons = document.querySelectorAll('[data-bs-target="#roomImageModal"]');
+            const modalImage = document.getElementById('modalRoomImage');
+
+            imageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageSrc = this.getAttribute('data-bs-image-src');
+                    modalImage.src = imageSrc;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

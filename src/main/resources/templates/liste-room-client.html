@@ -11,72 +11,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* Styles personnalisés */
-        .btn-soft-primary {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: rgb(113, 129, 141);
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .btn-soft-primary:hover {
-            background-color: rgba(52, 152, 219, 0.2);
-            transform: translateX(-5px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        .btn-soft-primary .btn-text {
-            font-weight: 500;
-            transition: opacity 0.3s ease;
-        }
-
         body {
-            background-color: #f4f6f7;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
         }
-
-        .chambre-card {
+        .room-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-bottom: 1.5rem;
-            border: none;
-            border-radius: 12px;
-            background: white;
+            border-radius: 15px;
+            overflow: hidden;
         }
-
-        .chambre-card:hover {
+        .room-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
         }
-
-        .image-container img {
-            width: 100%;
+        .room-image {
             height: 250px;
             object-fit: cover;
+            width: 100%;
             transition: transform 0.5s ease;
         }
-
-        .chambre-card:hover .image-container img {
-            transform: scale(1.1);
+        .room-card:hover .room-image {
+            transform: scale(1.05);
         }
-
-        .reservation-btn {
-            background-color: var(--primary-color);
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .reservation-btn:hover {
-            background-color: #2980b9;
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
     </style>
-
-    <script>
+    <script type="text/javascript">
         function submitForm() {
-            const filterForm = document.getElementById('filterForm');
-            filterForm.submit();
+            document.getElementById('filterForm').submit();
         }
-
         document.addEventListener('DOMContentLoaded', function () {
             const overlayIcons = document.querySelectorAll('.icon-overlay');
             const modalImage = document.getElementById('modalImage');
@@ -89,6 +58,7 @@
             });
         });
     </script>
+  
 </head>
 <body th:replace="layout/default-layout::body">
     <div th:fragment="content" class="container my-5">
@@ -101,86 +71,129 @@
                 <i class="fas fa-arrow-left me-2"></i>Retour
             </a>
         </div>
-
-        <form th:action="@{/clientpage}" method="get" class="search-filter">
-            <input type="text" name="roomName" class="form-control" placeholder="Rechercher une chambre" style="width: 250px" th:value="${roomName}" />
-            <button class="btn btn-outline-secondary" type="submit">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-
-        <form id="filterForm" th:action="@{/client/filter(roomType=${roomType})}" method="get" class="sort-options my-4">
+        <div class="col-md-2">
+            <a href="/clientpage" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-sync"></i> Réinitialiser
+            </a>
+        </div>
+        <form id="filterForm"
+              th:action="@{/client/filter}"
+              method="get"
+              class="sort-options">
+              
             <div class="row">
+                
                 <div class="col-md-4">
                     <strong>Type de Chambre :</strong>
-                    <select id="roomType" name="roomType" class="form-control" onchange="submitForm()">
-                        <option value="" th:selected="${roomType == null}">Tous les types</option>
+                    <select name="roomType" class="form-control" onchange="submitForm()">
+                        <option value="">Tous les types</option>
                         <option value="Double" th:selected="${roomType == 'Double'}">Double</option>
                         <option value="Single" th:selected="${roomType == 'Single'}">Single</option>
-                        <option value="Suite" th:selected="${roomType == 'Suite'}">Suite</option>
+                        <option value="SUITE" th:selected="${roomType == 'SUITE'}">Suite</option>
                     </select>
                 </div>
-
+                
                 <div class="col-md-4">
                     <strong>Vue :</strong>
                     <select name="view" class="form-control" onchange="submitForm()">
-                        <option value="" th:selected="${view == null}">Toutes les vues</option>
+                        <option value="">Toutes les vues</option>
                         <option value="Mer" th:selected="${view == 'Mer'}">Mer</option>
                         <option value="Jardin" th:selected="${view == 'Jardin'}">Jardin</option>
                         <option value="Ville" th:selected="${view == 'Ville'}">Ville</option>
                     </select>
                 </div>
-
+                
                 <div class="col-md-4">
                     <strong>Trier par Prix :</strong>
                     <div>
                         <label>
-                            <input type="radio" name="sortByPrix" value="asc" th:checked="${sortByPrix == 'asc'}" onchange="submitForm()" />
+                            <input type="radio"
+                                   name="sortByPrix"
+                                   value="asc"
+                                   th:checked="${sortByPrix=='asc'}"
+                                   onchange="submitForm()" />
                             Prix bas
                         </label>
-                        <label>
-                            <input type="radio" name="sortByPrix" value="desc" th:checked="${sortByPrix == 'desc'}" onchange="submitForm()" />
+                        <label >
+                            <input type="radio"
+                                   name="sortByPrix"
+                                   value="desc"
+                                   th:checked="${sortByPrix=='desc'}"
+                                   onchange="submitForm()" />
                             Prix élevé
                         </label>
+                        <input type="hidden" name="page" th:value="${currentPage}" />
                     </div>
+                    
                 </div>
+               
             </div>
         </form>
 
-        <div class="row g-4" th:each="room : ${rooms}">
-            <div class="col-12">
-                <div class="card chambre-card d-md-flex flex-md-row shadow-sm">
-                    <div class="col-md-4 image-container position-relative">
-                        <img th:src="@{'/images/' + ${room.images}}" alt="Image de la chambre" class="img-fluid" loading="lazy">
-                        <div class="icon-overlay" data-bs-toggle="modal" data-bs-target="#imageModal" th:attr="data-bs-image-src=@{'/images/' + ${room.images}}" aria-label="Agrandir l'image">
-                            <i class="fas fa-expand"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-md-8 p-4 d-flex flex-column justify-content-between">
-                        <div>
-                            <h4 class="card-title mb-3">Chambre n°<span th:text="${room.roomId}"></span> - <span th:text="${room.roomType}"></span></h4>
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="fas fa-users me-2 text-primary"></i>
-                                    <strong>Capacité :</strong> <span class="ms-2" th:text="${room.capacity} + ' personnes'"></span>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-euro-sign me-2 text-success"></i>
-                                    <strong>Tarif :</strong> <span class="price ms-2 text-success" th:text="${room.pricePerNight} + ' € / nuit'"></span>
+              <!-- Liste des chambres -->
+              <div class="row" th:if="${not #lists.isEmpty(rooms)}">
+                <div class="col-12" th:each="room : ${rooms}">
+                    <div class="card room-card mb-3">
+                        <div class="row g-0">
+                            <!-- Image -->
+                            <div class="col-md-4 position-relative">
+                                <img th:src="@{'/images/' + ${room.images}}" 
+                                     class="room-image" 
+                                     alt="Chambre" 
+                                     loading="lazy">
+                                <div class="position-absolute top-0 end-0 p-2">
+                                    <button class="btn btn-light btn-sm" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#roomImageModal"
+                                            th:attr="data-bs-image-src=@{'/images/' + ${room.images}}">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <h5 class="mt-3">Équipements :</h5>
-                            <p class="text-muted" th:text="${room.equipments}"></p>
+    
+                            <!-- Détails de la chambre -->
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        Chambre n°[[${room.roomId}]] - [[${room.roomType}]]
+                                    </h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-users me-2"></i>Capacité : [[${room.capacity}]] personnes
+                                                </small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="text-success">
+                                                    <i class="fas fa-euro-sign me-2"></i>[[${room.pricePerNight}]] € / nuit
+                                                </small>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Équipements :</h6>
+                                            <p class="card-text text-muted small">
+                                                [[${room.equipments}]]
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-calendar-check me-2"></i>Réserver
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <button class="btn btn-primary reservation-btn align-self-start mt-3" aria-label="Réserver cette chambre">
-                            Réserver Maintenant
-                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+    
+            <!-- Message si aucune chambre -->
+            <div th:if="${#lists.isEmpty(rooms)}" class="alert alert-info text-center" role="alert">
+                <i class="fas fa-info-circle me-2"></i>Aucune chambre ne correspond à vos critères.
+            </div>
+    
 
 
         <nav aria-label="Page navigation" th:if="${not #lists.isEmpty(rooms)}">
@@ -192,18 +205,12 @@
               >
                 <a
                   class="page-link"
-                  th:if="${roomName == null and sortByPrix == null}"
-                  th:href="@{/client(page=${currentPage - 1})}"
+                  th:if="${ sortByPrix == null}"
+                  th:href="@{/clientpage(page=${currentPage - 1})}"
                   >&laquo;</a
                 >
   
-                <a
-                  class="page-link"
-                  th:if="${roomName != null and sortByPrix == null}"
-                  th:href="@{/client(page=${currentPage - 1}, roomName=${roomName})}"
-                  >&laquo;</a
-                >
-  
+              
                 <a
                   class="page-link"
                   th:if="${roomName == null and sortByPrix != null}"
@@ -221,23 +228,17 @@
               >
                 <a
                   class="page-link"
-                  th:if="${roomName == null and sortByPrix == null}"
+                  th:if="${sortByPrix == null}"
                   th:href="@{/clientpage(page=${index})}"
                   th:text="${index + 1}"
                 >
                 </a>
   
-                <a
-                  class="page-link"
-                  th:if="${roomName != null and sortByPrix == null}"
-                  th:href="@{/clientpage(page=${index}, roomName=${roomName})}"
-                  th:text="${index + 1}"
-                >
-                </a>
+                
   
                 <a
                   class="page-link"
-                  th:if="${roomName == null and sortByPrix != null}"
+                  th:if="${sortByPrix != null}"
                   th:href="@{/client/filter(sortByPrix=${sortByPrix}, page=${index} ,roomType=${roomType}, 
            view=${view}, )}"
                   th:text="${index + 1}"
@@ -252,19 +253,13 @@
               >
                 <a
                   class="page-link"
-                  th:if="${roomName == null and sortByPrix == null}"
+                  th:if="${ sortByPrix == null}"
                   th:href="@{/clientpage(page=${currentPage + 1})}"
                 >
                   &raquo;
                 </a>
   
-                <a
-                  class="page-link"
-                  th:if="${roomName != null and sortByPrix == null}"
-                  th:href="@{/clientpage(page=${currentPage + 1}, roomName=${roomName})}"
-                >
-                  &raquo;
-                </a>
+               
   
                 <a
                   class="page-link"
@@ -277,9 +272,7 @@
               </li>
             </ul>
           </nav>
-        
     </div>
-
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -295,5 +288,35 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="roomImageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Détails de la chambre</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalRoomImage" src="" alt="Image de la chambre" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestion du modal d'image
+            const imageButtons = document.querySelectorAll('[data-bs-target="#roomImageModal"]');
+            const modalImage = document.getElementById('modalRoomImage');
+
+            imageButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const imageSrc = this.getAttribute('data-bs-image-src');
+                    modalImage.src = imageSrc;
+                });
+            });
+        });
+    </script>
 </body>
 </html>

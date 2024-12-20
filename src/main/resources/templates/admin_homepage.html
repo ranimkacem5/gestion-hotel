@@ -98,7 +98,7 @@
                         <h3 class="dashboard-card-title">Chambres</h3>
                         <p class="dashboard-card-content">
                             Total Chambres 
-                            <span class="badge stat-badge">15</span>
+                            <span class="badge stat-badge"  th:text="${nbrooms}">15</span>
                         </p>
                         <div class="quick-actions">
                             <a href="/rooms" class="btn btn-primary">
@@ -116,7 +116,7 @@
                         <h3 class="dashboard-card-title">Clients</h3>
                         <p class="dashboard-card-content">
                             Total Clients 
-                            <span class="badge stat-badge">42</span>
+                            <span class="badge stat-badge"  th:text="${nbcustomers}">42</span>
                         </p>
                         <div class="quick-actions">
                             <a href="/clients" class="btn btn-primary">
@@ -134,7 +134,7 @@
                         <h3 class="dashboard-card-title">Réservations</h3>
                         <p class="dashboard-card-content">
                             Total Réservations 
-                            <span class="badge stat-badge">28</span>
+                            <span class="badge stat-badge"  th:text="${nbbookings}" >28</span>
                         </p>
                         <div class="quick-actions">
                             <a href="/bookings" class="btn btn-primary">

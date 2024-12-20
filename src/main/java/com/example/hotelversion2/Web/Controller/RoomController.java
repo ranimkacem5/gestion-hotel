@@ -49,14 +49,14 @@ public class RoomController {
     public final RoomServices rommservice;
     public final BookingService bookingService;
     private static final Logger logger = LoggerFactory.getLogger(RoomController.class);
-
+    
 
 
 
     // System.getProperty("user.dir") : Renvoie le chemin du répertoire courant où
     // l'application s'exécute (souvent la racine du projet en mode développement).
     public static String uploadDirectory = System.getProperty("user.dir") + "/src/main/resources/static/images";
-    @Autowired
+   
     public RoomController(RoomServices roomservice ,BookingService bookingService) {
         this.rommservice =roomservice;
         this.bookingService=bookingService;
@@ -145,48 +145,51 @@ public String getAllRooms(
         model.addAttribute("totalPages", RoomPage.getTotalPages());
         return "rooms/list-rooms";
     }*/
+
     @RequestMapping("/rooms/filter")
-    public String filterRooms(
-            @RequestParam(required = false) RoomType roomType,
-            @RequestParam(required = false) String view,
-            @RequestParam(required = false, defaultValue = "asc") String sortByPrix,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int pageSize,
-            Model model) {
-        
-        Page<Room> RoomPage;
+public String filterRooms(
+        @RequestParam(required = false) RoomType roomType,
+        @RequestParam(required = false) String view,
+        @RequestParam(required = false, defaultValue = "asc") String sortByPrix,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "3") int pageSize,
+        Model model) {
     
-        // Vérification si aucun filtre n'est sélectionné
-        if ((roomType == null || roomType.toString().isEmpty()) && 
-            (view == null || view.isEmpty())) {
-            // Retourne à la liste initiale sans filtre
-            RoomPage = this.rommservice.getAllRoomPagination(PageRequest.of(page, pageSize));
-        } 
-        // Filtrer selon le type de chambre et la vue
-        else if (roomType != null && view != null && !view.isEmpty()) {
-            RoomPage = this.rommservice.filterRoomsByTypeAndView(roomType, view, sortByPrix, PageRequest.of(page, pageSize));
-        } 
-        else if (roomType != null && (view == null || view.isEmpty())) {
-            RoomPage = this.rommservice.filterRoomsByType(roomType, sortByPrix, PageRequest.of(page, pageSize));
-        } 
-        else if ((roomType == null || roomType.toString().isEmpty()) && view != null && !view.isEmpty()) {
-            RoomPage = this.rommservice.filterRoomsByView(view, sortByPrix, PageRequest.of(page, pageSize));
-        } 
-        else {
-            // Utiliser le tri par prix si rien d'autre n'est spécifié
-            RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
-        }
-    
-        model.addAttribute("rooms", RoomPage.getContent());
-        model.addAttribute("sortByPrix", sortByPrix);
-        model.addAttribute("roomType", roomType);
-        model.addAttribute("view", view);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", RoomPage.getTotalPages());
-        
-        return "rooms/list-rooms";
+    Page<Room> RoomPage;
+
+    // Vérification si aucun filtre n'est sélectionné
+    if (roomType == null && (view == null || view.isEmpty())) {
+        // Retourne la liste triée par prix si spécifié
+        RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
+    } 
+    // Filtrer selon le type de chambre et la vue
+    else if (roomType != null && view != null && !view.isEmpty()) {
+        RoomPage = this.rommservice.filterRoomsByTypeAndView(roomType, view, sortByPrix, PageRequest.of(page, pageSize));
+    } 
+    // Filtrer uniquement par type de chambre
+    else if (roomType != null) {
+        RoomPage = this.rommservice.filterRoomsByType(roomType, sortByPrix, PageRequest.of(page, pageSize));
+    } 
+    // Filtrer uniquement par vue
+    else if (view != null && !view.isEmpty()) {
+        RoomPage = this.rommservice.filterRoomsByView(view, sortByPrix, PageRequest.of(page, pageSize));
+    } 
+    else {
+        // Par défaut, retourner les chambres triées par prix
+        RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
     }
+
+    model.addAttribute("rooms", RoomPage.getContent());
+    model.addAttribute("sortByPrix", sortByPrix);
+    model.addAttribute("roomType", roomType);
+    model.addAttribute("view", view);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", RoomPage.getTotalPages());
+    
+    return "rooms/list-rooms";
+}
+
     /*@RequestMapping("/rooms/filter")
 public String filterRooms(
         @RequestParam(required = false) RoomType roomType,
