@@ -190,41 +190,6 @@ public String filterRooms(
     return "rooms/list-rooms";
 }
 
-    /*@RequestMapping("/rooms/filter")
-public String filterRooms(
-        @RequestParam(required = false) RoomType roomType,
-        @RequestParam(required = false) String view,
-        @RequestParam(required = false, defaultValue = "asc") String sortByPrix,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "3") int pageSize,
-        Model model) {
-    
-    Page<Room> RoomPage;
-
-    // Filtrer selon le type de chambre et la vue
-    if (roomType != null  && view != null && !view.isEmpty()) {
-        RoomPage = this.rommservice.filterRoomsByTypeAndView(roomType, view, sortByPrix, PageRequest.of(page, pageSize));
-    } else if (roomType != null&& view == null && view.isEmpty() ) {
-        RoomPage = this.rommservice.filterRoomsByType(roomType, sortByPrix, PageRequest.of(page, pageSize));
-    } else if (roomType==null && view != null && !view.isEmpty()) {
-        RoomPage = this.rommservice.filterRoomsByView(view, sortByPrix, PageRequest.of(page, pageSize));
-}
-     else {
-        // Si aucun filtre n'est appliqué, utiliser le tri par prix
-        RoomPage = this.rommservice.getRoomSortedByPricePagination(sortByPrix, PageRequest.of(page, pageSize));
-    }
-
-    model.addAttribute("rooms", RoomPage.getContent());
-    model.addAttribute("sortByPrix", sortByPrix);
-    model.addAttribute("roomType", roomType);
-    model.addAttribute("view", view);
-    model.addAttribute("pageSize", pageSize);
-    model.addAttribute("currentPage", page);
-    model.addAttribute("totalPages", RoomPage.getTotalPages());
-    
-    return "rooms/list-rooms";
-}*/
-
     // methode get qui va afficher le formulaire d'ajout
     @RequestMapping("/rooms/create")
     public String showAddRoomForm(Model model) {
